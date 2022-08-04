@@ -1,0 +1,40 @@
+{
+	"name": "javiertcs-api",
+	"type": "module",
+	"author": "javiertc",
+	"version": "1.0.0",
+	"dependencies": {
+		"axios": "^0.27.2",
+		"cors": "^2.8.5",
+		"dotenv": "^16.0.1",
+		"express": "^4.18.1",
+		"express-rate-limit": "^6.4.0",
+		"mongodb": "^4.7.0"
+	},
+	"devDependencies": {
+		"@types/express": "^4.17.13",
+		"@types/jest": "^28.1.4",
+		"@types/node": "^18.0.3",
+		"@typescript-eslint/eslint-plugin": "^5.30.6",
+		"@typescript-eslint/parser": "^5.30.6",
+		"eslint": "^8.19.0",
+		"jest": "^28.1.2",
+		"prettier": "^2.7.1",
+		"supertest": "^6.2.4",
+		"ts-jest": "^28.0.5",
+		"typescript": "^4.7.4"
+	},
+	"scripts": {
+		"postinstall": "npm run build",
+		"prebuild": "rm -rf ./dist",
+		"build": "tsc",
+		"start": "node --require dotenv/config dist/server",
+		"dev": "nodemon -e ts --exec \"npm run build && npm start\"",
+		"test": "node --experimental-vm-modules ./node_modules/.bin/jest",
+		"test-coverage": "node --experimental-vm-modules ./node_modules/.bin/jest --coverage --watchAll"
+	},
+	"engines": {
+		"node": "16.16.x",
+		"npm": "8.13.x"
+	}
+}
