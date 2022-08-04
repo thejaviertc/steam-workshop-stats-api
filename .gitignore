@@ -1,4 +1,5 @@
 .env.local
+/design
 /dist
 /node_modules
 /coverage
