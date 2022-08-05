@@ -18,9 +18,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
 // Express Middlewares
-app.use(ipsMiddleware);
-app.use(rateMiddleware);
-app.use(logMiddleware);
+if (process.env.NODE_ENV == "development") {
+	app.use(ipsMiddleware);
+	app.use(rateMiddleware);
+	app.use(logMiddleware);
+}
+
 app.use("/steam-workshop-stats", steamRouter);
 app.use("/twitch-stats", twitchRouter);
 app.use(errorMiddleware);

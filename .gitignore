@@ -1,4 +1,4 @@
-.env.local
+.env
 /design
 /dist
 /node_modules

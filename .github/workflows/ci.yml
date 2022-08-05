@@ -21,6 +21,6 @@ jobs:
                   npm install
                   npm run build
 
-            # - name: 🧪 Test Project
-            #   run: |
-            #       npm run test
+            - name: 🧪 Test Project
+              run: |
+                  npm run test

@@ -1,4 +1,7 @@
-export default class Stream {
+/**
+ * Class for storing Stream information
+ */
+class Stream {
 	private title: string;
 	private image: string;
 	private url: string;
@@ -59,3 +62,5 @@ export default class Stream {
 		this.views = views;
 	}
 }
+
+export default Stream;
