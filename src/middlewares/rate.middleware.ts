@@ -1,7 +1,7 @@
 import { rateLimit } from "express-rate-limit";
 
 export default rateLimit({
-	windowMs: 120 * 60 * 1000,
+	windowMs: 1 * 60 * 60 * 1000, // 1 hours
 	max: 10,
 	standardHeaders: false,
 	legacyHeaders: false,
