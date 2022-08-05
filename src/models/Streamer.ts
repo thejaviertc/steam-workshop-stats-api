@@ -4,7 +4,7 @@ import TStreamer from "./TStreamer.js";
 /**
  * Class for storing all the Streamer information
  */
-export default class Streamer {
+class Streamer {
 	private id: string;
 	private username: string;
 	private profileImage: string;
@@ -118,3 +118,5 @@ export default class Streamer {
 		return urlPattern.test(url);
 	}
 }
+
+export default Streamer;

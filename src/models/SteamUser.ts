@@ -3,7 +3,7 @@ import Addon from "./Addon.js";
 /**
  * Class for storing all the Steam User information
  */
-export default class SteamUser {
+class SteamUser {
 	private steamId: string;
 	private username: string;
 	private profileImage: string;
@@ -129,3 +129,5 @@ export default class SteamUser {
 		return urlPattern.test(url);
 	}
 }
+
+export default SteamUser;

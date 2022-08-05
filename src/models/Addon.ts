@@ -1,7 +1,7 @@
 /**
  * Class for storing the Addon information
  */
-export default class Addon {
+class Addon {
 	private id: number;
 	private title: string;
 	private image: string;
@@ -128,3 +128,5 @@ export default class Addon {
 		this.dislikes = dislikes;
 	}
 }
+
+export default Addon;
