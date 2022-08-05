@@ -31,8 +31,7 @@
 		"build": "tsc",
 		"start": "node --require dotenv/config dist/server",
 		"dev": "nodemon -e ts --exec \"npm run build && npm start\"",
-		"test": "node --experimental-vm-modules ./node_modules/.bin/jest",
-		"test-coverage": "node --experimental-vm-modules ./node_modules/.bin/jest --coverage --watchAll"
+		"test": "jest"
 	},
 	"engines": {
 		"node": "16.16.x"

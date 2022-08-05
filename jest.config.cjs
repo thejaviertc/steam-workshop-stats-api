@@ -1,4 +1,5 @@
-export default {
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
+module.exports = {
 	roots: ["<rootDir>/src"],
 	preset: "ts-jest",
 	setupFiles: ["dotenv/config"],
@@ -13,4 +14,6 @@ export default {
 	moduleNameMapper: {
 		"^(\\.{1,2}/.*)\\.js$": "$1",
 	},
+	collectCoverage: true,
+	collectCoverageFrom: ["./src/**"],
 };
