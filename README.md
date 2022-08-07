@@ -10,6 +10,11 @@
     <img src="https://github.com/thejaviertc/javiertcs-api/actions/workflows/ci.yml/badge.svg" />
 </div>
 
+## Contributing:
+
+Contributions towards the project are welcomed. Some ways you can contribute include:
+* Code changes for improving the app.
+
 ## Suggestions/Bugs:
 
 Do you have a suggestion or you discover a bug? Make an [issue](https://github.com/thejaviertc/javiertcs-api/issues/new).
