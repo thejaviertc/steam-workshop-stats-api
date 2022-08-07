@@ -2,7 +2,7 @@
 	"name": "javiertcs-api",
 	"type": "module",
 	"author": "javiertc",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"dependencies": {
 		"axios": "^0.27.2",
 		"cors": "^2.8.5",
