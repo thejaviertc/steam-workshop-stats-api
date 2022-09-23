@@ -48,17 +48,6 @@ class DiscordAPI {
 				],
 				timestamp: new Date(),
 			};
-		} else if (url.includes("twitch")) {
-			embed = {
-				title: "Javiertc's API",
-				color: 9520895,
-				type: "rich",
-				fields: [
-					{ name: "Type", value: "Twitch", inline: false },
-					{ name: "Streamer", value: url, inline: false },
-				],
-				timestamp: new Date(),
-			};
 		}
 
 		// Sends the embed to the discord server

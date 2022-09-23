@@ -1,4 +1,3 @@
-import axios from "axios";
 import DiscordAPI from "../services/DiscordAPI.js";
 
 /**
