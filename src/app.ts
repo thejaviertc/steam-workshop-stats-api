@@ -4,7 +4,6 @@ import express from "express";
 
 // Routes
 import steamRouter from "./routes/steam.routes.js";
-import twitchRouter from "./routes/twitch.routes.js";
 
 // Middlewares
 import errorMiddleware from "./middlewares/error.middleware.js";
@@ -25,7 +24,6 @@ if (process.env.NODE_ENV == "production") {
 }
 
 app.use("/steam-workshop-stats", steamRouter);
-app.use("/twitch-stats", twitchRouter);
 app.use(errorMiddleware);
 
 export default app;
