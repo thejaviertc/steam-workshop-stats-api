@@ -23,7 +23,7 @@
 		"prettier": "^2.7.1",
 		"supertest": "^6.2.4",
 		"ts-jest": "^29.0.1",
-		"typescript": "^4.8.3"
+		"typescript": "^4.8.4"
 	},
 	"scripts": {
 		"postinstall": "npm run build",
