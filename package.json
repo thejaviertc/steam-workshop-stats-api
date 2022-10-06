@@ -4,7 +4,7 @@
 	"author": "javiertc",
 	"version": "1.0.3",
 	"dependencies": {
-		"axios": "^0.27.2",
+		"axios": "^1.1.0",
 		"cors": "^2.8.5",
 		"dotenv": "^16.0.2",
 		"express": "^4.18.1",
