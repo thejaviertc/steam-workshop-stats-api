@@ -1,5 +1,4 @@
 .env
-/design
 /dist
 /node_modules
 /coverage
