@@ -31,24 +31,20 @@ class DiscordAPI {
 	 * @param url string
 	 */
 	public logValidQuery(url: string) {
-		let embed;
-
-		if (url.includes("steam")) {
-			embed = {
-				title: "Javiertc's API",
-				color: 36095,
-				type: "rich",
-				fields: [
-					{ name: "Type", value: "Steam", inline: false },
-					{
-						name: "Steam Profile",
-						value: url,
-						inline: false,
-					},
-				],
-				timestamp: new Date(),
-			};
-		}
+		const embed = {
+			title: "Javiertc's API",
+			color: 36095,
+			type: "rich",
+			fields: [
+				{ name: "Type", value: "Steam", inline: false },
+				{
+					name: "Steam Profile",
+					value: url,
+					inline: false,
+				},
+			],
+			timestamp: new Date(),
+		};
 
 		// Sends the embed to the discord server
 		axios({

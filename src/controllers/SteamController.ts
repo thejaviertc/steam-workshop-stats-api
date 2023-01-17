@@ -12,7 +12,7 @@ class SteamController {
 	 * @param res
 	 */
 	public async getSteamUser(req, res) {
-		const url = req.query.url;
+		const url: string = req.query.url;
 
 		// Prevents continuing if the url isn't valid
 		if (!SteamUser.isProfileUrlValid(url))
@@ -48,7 +48,7 @@ class SteamController {
 		);
 
 		// Logs the query
-		DiscordAPI.logValidQuery(req.query.url);
+		DiscordAPI.logValidQuery(url);
 	}
 }
 
