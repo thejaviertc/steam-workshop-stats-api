@@ -1,10 +1,7 @@
-import SteamApi from "../services/SteamAPI.js";
 import SteamUser from "../models/SteamUser.js";
 import DiscordAPI from "../services/DiscordAPI.js";
+import SteamApi from "../services/SteamAPI.js";
 
-/**
- * Steam User's Controller
- */
 class SteamController {
 	/**
 	 * Obtains the info of the Steam User and sends it
@@ -14,11 +11,9 @@ class SteamController {
 	public async getSteamUser(req, res) {
 		const url: string = req.query.url;
 
-		// Prevents continuing if the url isn't valid
 		if (!SteamUser.isProfileUrlValid(url))
 			return res.status(400).send({ message: "This URL is not valid!" });
 
-		// Fetches the SteamID
 		const steamId = await SteamApi.fetchSteamId(url);
 
 		// Fetches the basic info of the user

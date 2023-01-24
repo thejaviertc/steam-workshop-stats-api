@@ -1,6 +1,3 @@
-/**
- * Class for storing the Addon information
- */
 class Addon {
 	private id: number;
 	private title: string;

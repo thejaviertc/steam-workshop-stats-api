@@ -1,8 +1,5 @@
 import Addon from "./Addon.js";
 
-/**
- * Class for storing all the Steam User information
- */
 class SteamUser {
 	private steamId: string;
 	private username: string;

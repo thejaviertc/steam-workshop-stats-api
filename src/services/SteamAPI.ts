@@ -1,10 +1,7 @@
-import Addon from "../models/Addon.js";
 import axios from "axios";
+import Addon from "../models/Addon.js";
 import ISteamAPI from "./ISteamAPI.js";
 
-/**
- * Class for fetching the Steam API
- */
 class SteamApi implements ISteamAPI {
 	/**
 	 * Fetches the Steam API and returns the SteamID of the user
@@ -64,7 +61,7 @@ class SteamApi implements ISteamAPI {
 			response = await axios.get(
 				`https://api.steampowered.com/IPublishedFileService/GetUserFiles/v1/?key=${process.env.STEAM_API}&steamid=${steamId}&numperpage=500&return_vote_data=true`
 			);
-		} catch (error) {}
+		} catch (error) { }
 
 		// Variables for storing the count and list of addons
 		const addonsInfo = {
