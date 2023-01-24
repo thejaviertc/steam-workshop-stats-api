@@ -13,7 +13,8 @@
 ## Contributing:
 
 Contributions towards the project are welcomed. Some ways you can contribute include:
-* Code changes for improving the app.
+
+-   Code changes for improving the app.
 
 ## Suggestions/Bugs:
 
