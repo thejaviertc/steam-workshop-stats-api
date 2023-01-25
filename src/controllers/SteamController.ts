@@ -1,10 +1,11 @@
+import UsernameNotFoundError from "../errors/UsernameNotFoundError.js";
 import SteamUser from "../models/SteamUser.js";
 import DiscordAPI from "../services/DiscordAPI.js";
-import SteamApi from "../services/SteamAPI.js";
+import SteamService from "../services/SteamService.js";
 
 class SteamController {
 	/**
-	 * Obtains the info of the Steam User and sends it
+	 * Returns the info of the Steam User
 	 * @param req
 	 * @param res
 	 */
@@ -14,36 +15,44 @@ class SteamController {
 		if (!SteamUser.isProfileUrlValid(url))
 			return res.status(400).send({ message: "This URL is not valid!" });
 
-		const steamId = await SteamApi.fetchSteamId(url);
+		// Get the type of url and it's value
+		const pattern = /https:\/\/steamcommunity.com\/(?<type>.*)\/(?<value>.*)/;
+		const regex = pattern.exec(url);
 
-		// Fetches the basic info of the user
-		const basicInfo = await SteamApi.fetchBasicInfo(steamId);
+		const urlType = regex.groups.type;
+		const urlValue = regex.groups.value;
 
-		// Checks if the profile is valid
-		if (basicInfo == null)
-			return res
-				.status(400)
-				.send({ message: "This user doesn't exists!" });
+		// Get the value from the URL (if it's profile) or fetch it if not
+		let steamId: string = urlValue;
 
-		// Fetches all the addons info
-		const addonsInfo = await SteamApi.fetchAddonsInfo(steamId);
+		try {
+			if (urlType === "id")
+				steamId = await SteamService.fetchSteamId(urlValue);
 
-		res.send(
-			new SteamUser(
-				steamId,
-				basicInfo.personaname,
-				basicInfo.avatarfull,
-				addonsInfo.subs,
-				addonsInfo.lifeSubs,
-				addonsInfo.favs,
-				addonsInfo.lifeFavs,
-				addonsInfo.viewers,
-				addonsInfo.addons
-			)
-		);
+			const [basicInfo, addonsInfo] = await Promise.all([SteamService.fetchBasicInfo(steamId), SteamService.fetchAddonsInfo(steamId)]);
 
-		// Logs the query
-		DiscordAPI.logValidQuery(url);
+			res.send(
+				new SteamUser(
+					steamId,
+					basicInfo.username,
+					basicInfo.profileImage,
+					addonsInfo.subs,
+					addonsInfo.lifeSubs,
+					addonsInfo.favs,
+					addonsInfo.lifeFavs,
+					addonsInfo.viewers,
+					addonsInfo.addons
+				)
+			);
+		} catch (error) {
+			if (error instanceof UsernameNotFoundError)
+				res.status(400).send({ message: error.message });
+			else
+				res.status(500).send({ message: error.message });
+		}
+
+		// // Logs the query
+		// DiscordAPI.logValidQuery(url);
 	}
 }
 

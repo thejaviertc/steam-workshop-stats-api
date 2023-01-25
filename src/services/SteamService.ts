@@ -1,33 +1,26 @@
 import axios from "axios";
+import BasicInfoNotFoundError from "../errors/BasicInfoNotFoundError.js";
+import SteamIdNotFoundError from "../errors/SteamIdNotFoundError.js";
+import UsernameNotFoundError from "../errors/UsernameNotFoundError.js";
 import Addon from "../models/Addon.js";
-import ISteamAPI from "./ISteamAPI.js";
+import ISteamService from "./ISteamService.js";
 
-class SteamApi implements ISteamAPI {
+class SteamService implements ISteamService {
 	/**
 	 * Fetches the Steam API and returns the SteamID of the user
-	 * @param url
+	 * @param id
 	 * @returns string
 	 */
-	public async fetchSteamId(url: string): Promise<string> {
-		let steamid;
-		const splittedUrl = url.split("/");
+	public async fetchSteamId(id: string): Promise<string> {
+		try {
+			const response = await axios.get(
+				`https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=${process.env.STEAM_API}&vanityurl=${id}`
+			);
 
-		// Gets the part of the ID from the url
-		url = splittedUrl[4];
-
-		// Depending of the type of the url
-		if (splittedUrl.includes("id")) {
-			try {
-				const response = await axios.get(
-					`https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=${process.env.STEAM_API}&vanityurl=${url}`
-				);
-				steamid = response.data.response.steamid;
-			} catch (error) {
-				throw new Error("Steam API fetching SteamID failed");
-			}
-		} else steamid = url;
-
-		return steamid;
+			return response.data.response.steamid;
+		} catch (error) {
+			throw new SteamIdNotFoundError();
+		}
 	}
 
 	/**
@@ -36,17 +29,21 @@ class SteamApi implements ISteamAPI {
 	 * @returns Object
 	 */
 	public async fetchBasicInfo(steamId: string) {
-		let response;
-
 		try {
-			response = await axios.get(
+			const response = await axios.get(
 				`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${process.env.STEAM_API}&steamids=${steamId}`
 			);
-		} catch (error) {
-			throw new Error("Steam API fetching basic info failed");
-		}
 
-		return response.data.response.players[0];
+			if (response.data.response.players.length === 0)
+				throw new UsernameNotFoundError();
+
+			return {
+				username: response.data.response.players[0].personaname,
+				profileImage: response.data.response.players[0].avatarfull
+			};
+		} catch (error) {
+			throw new BasicInfoNotFoundError();
+		}
 	}
 
 	/**
@@ -61,9 +58,10 @@ class SteamApi implements ISteamAPI {
 			response = await axios.get(
 				`https://api.steampowered.com/IPublishedFileService/GetUserFiles/v1/?key=${process.env.STEAM_API}&steamid=${steamId}&numperpage=500&return_vote_data=true`
 			);
-		} catch (error) { }
+		} catch (error) {
+			throw new BasicInfoNotFoundError();
+		}
 
-		// Variables for storing the count and list of addons
 		const addonsInfo = {
 			subs: 0,
 			lifeSubs: 0,
@@ -73,10 +71,8 @@ class SteamApi implements ISteamAPI {
 			addons: [],
 		};
 
-		// Creates a list with all the addons
 		if (response.data.response.total > 0) {
 			response.data.response.publishedfiledetails.forEach((addon) => {
-				// Sums all addon's stats
 				addonsInfo.subs += addon.subscriptions;
 				addonsInfo.lifeSubs += addon.lifetime_subscriptions;
 				addonsInfo.favs += addon.favorited;
@@ -99,17 +95,17 @@ class SteamApi implements ISteamAPI {
 					)
 				);
 			});
-		}
 
-		// Sorts addons by release date
-		addonsInfo.addons = addonsInfo.addons.sort(
-			(a: Addon, b: Addon): number => {
-				return b.getId() - a.getId();
-			}
-		);
+			// Sorts addons by release date
+			addonsInfo.addons = addonsInfo.addons.sort(
+				(a: Addon, b: Addon): number => {
+					return b.getId() - a.getId();
+				}
+			);
+		}
 
 		return addonsInfo;
 	}
 }
 
-export default new SteamApi();
+export default new SteamService();
