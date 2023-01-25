@@ -21,9 +21,9 @@ export default async function ipsMiddleware(req, res, next) {
 		DiscordAPI.logBannedIp(userIp);
 		res.status(503).send({ message: "You sent too many requests." });
 	} else {
-		let searchIndex = ipCounter.findIndex((ip) => ip.ip == userIp);
+		let searchIndex = ipCounter.findIndex((ip) => ip.ip === userIp);
 
-		if (searchIndex == -1) {
+		if (searchIndex === -1) {
 			ipCounter.push({ ip: userIp, count: 1 });
 			next();
 		} else {

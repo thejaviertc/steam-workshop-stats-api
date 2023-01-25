@@ -102,14 +102,14 @@ class SteamUser {
 	}
 
 	public getAddon(id: number): Addon {
-		return this.addons.find((addon) => addon.getId() == id);
+		return this.addons.find((addon) => addon.getId() === id);
 	}
 
 	public removeAddon(id: number) {
 		let found = false;
 
 		for (let i = 0; i < this.addons.length && found; i++) {
-			if (this.addons[i].getId() == id) {
+			if (this.addons[i].getId() === id) {
 				this.addons.splice(i, 1);
 				found = true;
 			}
