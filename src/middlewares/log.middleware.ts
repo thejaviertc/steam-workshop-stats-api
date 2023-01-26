@@ -1,4 +1,4 @@
-import DiscordAPI from "../services/DiscordAPI.js";
+import DiscordService from "../services/DiscordService.js";
 
 /**
  * Logs every GET/POST of the website in my Discord Server
@@ -7,6 +7,6 @@ import DiscordAPI from "../services/DiscordAPI.js";
  * @param next
  */
 export default function logMiddleware(req, res, next) {
-	DiscordAPI.logQuery(req.url);
+	DiscordService.logRoute(req);
 	next();
 }
