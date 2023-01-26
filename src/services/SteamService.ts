@@ -1,4 +1,5 @@
 import axios from "axios";
+import AddonsNotFoundError from "../errors/AddonsNotFoundError.js";
 import BasicInfoNotFoundError from "../errors/BasicInfoNotFoundError.js";
 import SteamIdNotFoundError from "../errors/SteamIdNotFoundError.js";
 import UsernameNotFoundError from "../errors/UsernameNotFoundError.js";
@@ -42,7 +43,10 @@ class SteamService implements ISteamService {
 				profileImage: response.data.response.players[0].avatarfull
 			};
 		} catch (error) {
-			throw new BasicInfoNotFoundError();
+			if (error instanceof UsernameNotFoundError)
+				throw error;
+			else
+				throw new BasicInfoNotFoundError();
 		}
 	}
 
@@ -59,7 +63,7 @@ class SteamService implements ISteamService {
 				`https://api.steampowered.com/IPublishedFileService/GetUserFiles/v1/?key=${process.env.STEAM_API}&steamid=${steamId}&numperpage=500&return_vote_data=true`
 			);
 		} catch (error) {
-			throw new BasicInfoNotFoundError();
+			throw new AddonsNotFoundError();
 		}
 
 		const addonsInfo = {
