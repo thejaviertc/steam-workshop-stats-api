@@ -1,6 +1,6 @@
-import UsernameNotFoundError from "../errors/UsernameNotFoundError.js";
+import UrlNotValidError from "../errors/UrlNotValidError.js";
 import SteamUser from "../models/SteamUser.js";
-import DiscordAPI from "../services/DiscordAPI.js";
+import DiscordService from "../services/DiscordService.js";
 import SteamService from "../services/SteamService.js";
 
 class SteamController {
@@ -10,22 +10,22 @@ class SteamController {
 	 * @param res
 	 */
 	public async getSteamUser(req, res) {
-		const url: string = req.query.url;
-
-		if (!SteamUser.isProfileUrlValid(url))
-			return res.status(400).send({ message: "This URL is not valid!" });
-
-		// Get the type of url and it's value
-		const pattern = /https:\/\/steamcommunity.com\/(?<type>.*)\/(?<value>.*)/;
-		const regex = pattern.exec(url);
-
-		const urlType = regex.groups.type;
-		const urlValue = regex.groups.value;
-
-		// Get the value from the URL (if it's profile) or fetch it if not
-		let steamId: string = urlValue;
-
 		try {
+			const url: string = req.query.url;
+
+			if (!SteamUser.isProfileUrlValid(url))
+				throw new UrlNotValidError();
+
+			// Get the type of url and it's value
+			const pattern = /https:\/\/steamcommunity.com\/(?<type>.*)\/(?<value>.*)/;
+			const regex = pattern.exec(url);
+
+			const urlType = regex.groups.type;
+			const urlValue = regex.groups.value;
+
+			// Get the value from the URL (if it's profile) or fetch it if not
+			let steamId: string = urlValue;
+
 			if (urlType === "id")
 				steamId = await SteamService.fetchSteamId(urlValue);
 
@@ -44,15 +44,12 @@ class SteamController {
 					addonsInfo.addons
 				)
 			);
-		} catch (error) {
-			if (error instanceof UsernameNotFoundError)
-				res.status(400).send({ message: error.message });
-			else
-				res.status(500).send({ message: error.message });
-		}
 
-		// // Logs the query
-		// DiscordAPI.logValidQuery(url);
+			DiscordService.logQuery(req);
+		} catch (error) {
+			DiscordService.logQuery(req, error.message);
+			res.status(error.httpCode).send({ message: error.message });
+		}
 	}
 }
 
