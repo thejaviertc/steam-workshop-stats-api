@@ -6,12 +6,18 @@ module.exports = {
 	testEnvironment: "node",
 	verbose: true,
 	extensionsToTreatAsEsm: [".ts"],
-	globals: {
-		"ts-jest": {
-			useESM: true,
-		},
-	},
 	moduleNameMapper: {
 		"^(\\.{1,2}/.*)\\.js$": "$1",
 	},
+	transform: {
+		"^.+\\.tsx?$": [
+			"ts-jest",
+			{
+				useESM: true,
+			},
+		],
+	},
+	transformIgnorePatterns: [
+		"node_modules/(?!@ngrx|(?!deck.gl)|ng-dynamic)"
+	]
 };

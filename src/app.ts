@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
 // Express Middlewares
-if (process.env.NODE_ENV == "production") {
+if (process.env.NODE_ENV === "production") {
 	app.use(ipsMiddleware);
 	app.use(rateMiddleware);
 	app.use(logMiddleware);

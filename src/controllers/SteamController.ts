@@ -1,54 +1,55 @@
-import SteamApi from "../services/SteamAPI.js";
+import UrlNotValidError from "../errors/UrlNotValidError.js";
 import SteamUser from "../models/SteamUser.js";
-import DiscordAPI from "../services/DiscordAPI.js";
+import DiscordService from "../services/DiscordService.js";
+import SteamService from "../services/SteamService.js";
 
-/**
- * Steam User's Controller
- */
 class SteamController {
 	/**
-	 * Obtains the info of the Steam User and sends it
+	 * Returns the info of the Steam User
 	 * @param req
 	 * @param res
 	 */
 	public async getSteamUser(req, res) {
-		const url: string = req.query.url;
+		try {
+			const url: string = req.query.url;
 
-		// Prevents continuing if the url isn't valid
-		if (!SteamUser.isProfileUrlValid(url))
-			return res.status(400).send({ message: "This URL is not valid!" });
+			if (!SteamUser.isProfileUrlValid(url))
+				throw new UrlNotValidError();
 
-		// Fetches the SteamID
-		const steamId = await SteamApi.fetchSteamId(url);
+			// Get the type of url and it's value
+			const pattern = /https:\/\/steamcommunity.com\/(?<type>.*)\/(?<value>.*)/;
+			const regex = pattern.exec(url);
 
-		// Fetches the basic info of the user
-		const basicInfo = await SteamApi.fetchBasicInfo(steamId);
+			const urlType = regex.groups.type;
+			const urlValue = regex.groups.value;
 
-		// Checks if the profile is valid
-		if (basicInfo == null)
-			return res
-				.status(400)
-				.send({ message: "This user doesn't exists!" });
+			// Get the value from the URL (if it's profile) or fetch it if not
+			let steamId: string = urlValue;
 
-		// Fetches all the addons info
-		const addonsInfo = await SteamApi.fetchAddonsInfo(steamId);
+			if (urlType === "id")
+				steamId = await SteamService.fetchSteamId(urlValue);
 
-		res.send(
-			new SteamUser(
-				steamId,
-				basicInfo.personaname,
-				basicInfo.avatarfull,
-				addonsInfo.subs,
-				addonsInfo.lifeSubs,
-				addonsInfo.favs,
-				addonsInfo.lifeFavs,
-				addonsInfo.viewers,
-				addonsInfo.addons
-			)
-		);
+			const [basicInfo, addonsInfo] = await Promise.all([SteamService.fetchBasicInfo(steamId), SteamService.fetchAddonsInfo(steamId)]);
 
-		// Logs the query
-		DiscordAPI.logValidQuery(url);
+			res.send(
+				new SteamUser(
+					steamId,
+					basicInfo.username,
+					basicInfo.profileImage,
+					addonsInfo.subs,
+					addonsInfo.lifeSubs,
+					addonsInfo.favs,
+					addonsInfo.lifeFavs,
+					addonsInfo.viewers,
+					addonsInfo.addons
+				)
+			);
+
+			DiscordService.logQuery(req);
+		} catch (error) {
+			DiscordService.logQuery(req, error.message);
+			res.status(error.httpCode).send({ message: error.message });
+		}
 	}
 }
 
