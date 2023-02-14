@@ -1,12 +1,30 @@
-import { MongoClient } from "mongodb";
+import pg from "pg";
+const { Pool } = pg;
 import IDatabaseService from "./IDatabaseService";
 
 class DatabaseService implements IDatabaseService {
-	private database: MongoClient;
+	private database;
 
 	public constructor() {
-		this.database = new MongoClient(process.env.MONGO_URL);
-		this.database.connect();
+		this.database = new Pool({
+			user: process.env.DATABASE_USERNAME,
+			host: process.env.DATABASE_HOST,
+			database: process.env.DATABASE_NAME,
+			password: process.env.DATABASE_PASSWORD,
+			port: process.env.DATABASE_PORT,
+			ssl: {
+				rejectUnauthorized: false,
+			}
+		});
+	}
+
+	public async test() {
+		try {
+			const results = await this.database.query("SELECT NOW()");
+			console.log(results);
+		} catch (err) {
+			console.error("error executing query:", err);
+		}
 	}
 
 	/**
