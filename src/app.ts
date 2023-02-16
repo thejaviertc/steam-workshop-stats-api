@@ -7,7 +7,7 @@ import steamRouter from "./routes/steam.routes.js";
 
 // Middlewares
 import errorMiddleware from "./middlewares/error.middleware.js";
-import ipsMiddleware from "./middlewares/ips.middleware.js";
+import IpsMiddleware from "./middlewares/ips.middleware.js";
 import logMiddleware from "./middlewares/log.middleware.js";
 
 // Express
@@ -17,7 +17,8 @@ app.use(cors());
 
 // Express Middlewares
 if (process.env.NODE_ENV === "production") {
-	app.use(ipsMiddleware);
+	await IpsMiddleware.initialize();
+	app.use(IpsMiddleware.processQuery);
 	app.use(logMiddleware);
 }
 
