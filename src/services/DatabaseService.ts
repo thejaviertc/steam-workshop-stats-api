@@ -18,34 +18,31 @@ class DatabaseService implements IDatabaseService {
 		});
 	}
 
-	public async test() {
+	/**
+	 * Obtains the banned ips from the database
+	 * @returns string[]
+	 */
+	public async getBannedIps(): Promise<string[]> {
 		try {
-			const results = await this.database.query("SELECT NOW()");
-			console.log(results);
-		} catch (err) {
-			console.error("error executing query:", err);
+			const result = await this.database.query("SELECT ip FROM banned_ip");
+
+			const bannedIps = [];
+
+			result.rows.forEach(value => {
+				bannedIps.push(value.ip);
+			});
+
+			return bannedIps;
+		} catch (error) {
+			console.log(error);
 		}
 	}
 
 	/**
-	 * Checks if the IP is inside the database
-	 * @param ip string
-	 * @returns boolean
-	 */
-	public async isIpInDatabase(ip: string): Promise<boolean> {
-		return (
-			(await this.database
-				.db("bannedIps")
-				.collection("bannedIps")
-				.findOne({ ip: ip })) != null
-		);
-	}
-
-	/**
-	 * Adds the IP to the database
+	 * Inserts the banned IP in the database
 	 * @param ip string
 	 */
-	public async addIp(ip: string) {
+	public async insertBannedIp(ip: string) {
 		this.database.db("bannedIps").collection("bannedIps").insertOne({ ip: ip });
 	}
 }
