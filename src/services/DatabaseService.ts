@@ -43,7 +43,11 @@ class DatabaseService implements IDatabaseService {
 	 * @param ip string
 	 */
 	public async insertBannedIp(ip: string) {
-		this.database.db("bannedIps").collection("bannedIps").insertOne({ ip: ip });
+		try {
+			await this.database.query("INSERT INTO banned_ip (ip) VALUES ($1)", [ip]);
+		} catch (error) {
+			console.log(error);
+		}
 	}
 }
 
