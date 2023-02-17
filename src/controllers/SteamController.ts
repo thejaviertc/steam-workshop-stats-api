@@ -11,16 +11,13 @@ class SteamController {
 	 */
 	public async getSteamUser(req, res) {
 		try {
-			let url: string = req.query.url;
+			const url: string = req.query.url;
 
 			if (!SteamUser.isProfileUrlValid(url))
 				throw new UrlNotValidError();
 
-			if (url.endsWith("/"))
-				url = url.substring(0, url.length - 1);
-
 			// Get the type of url and it's value
-			const pattern = /https:\/\/steamcommunity.com\/(?<type>.*)\/(?<value>.*)/;
+			const pattern = /https:\/\/steamcommunity.com\/(?<type>(id|profiles))\/(?<value>[a-zA-Z0-9]+)\/?/;
 			const regex = pattern.exec(url);
 
 			const urlType = regex.groups.type;

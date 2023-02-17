@@ -122,7 +122,7 @@ class SteamUser {
 	 * @returns boolean
 	 */
 	public static isProfileUrlValid(url: string): boolean {
-		const urlPattern = /https:\/\/steamcommunity.com\/(id|profiles)\/*/;
+		const urlPattern = /https:\/\/steamcommunity.com\/(id|profiles)\/[a-zA-Z0-9]+\/?/;
 		return urlPattern.test(url);
 	}
 }
