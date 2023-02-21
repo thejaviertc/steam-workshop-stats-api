@@ -14,7 +14,7 @@ class DatabaseService implements IDatabaseService {
 			port: process.env.DATABASE_PORT,
 			ssl: {
 				rejectUnauthorized: false,
-			}
+			},
 		});
 	}
 
@@ -28,7 +28,7 @@ class DatabaseService implements IDatabaseService {
 
 			const bannedIps = [];
 
-			result.rows.forEach(value => {
+			result.rows.forEach((value) => {
 				bannedIps.push(value.ip);
 			});
 

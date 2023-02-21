@@ -16,16 +16,18 @@ class DiscordService implements IDiscordService {
 			url: process.env.DISCORD_WEBHOOK_LOG,
 			headers: { "Content-Type": "application/json" },
 			data: JSON.stringify({
-				embeds: [{
-					title: "Route Access",
-					color: 10070709,
-					type: "rich",
-					fields: [
-						{ name: "Route", value: route, inline: false },
-						{ name: "User IP", value: ip, inline: false }
-					],
-					timestamp: new Date(),
-				}]
+				embeds: [
+					{
+						title: "Route Access",
+						color: 10070709,
+						type: "rich",
+						fields: [
+							{ name: "Route", value: route, inline: false },
+							{ name: "User IP", value: ip, inline: false },
+						],
+						timestamp: new Date(),
+					},
+				],
 			}),
 		});
 	}
@@ -45,7 +47,7 @@ class DiscordService implements IDiscordService {
 			type: "rich",
 			fields: [
 				{ name: "Value", value: value, inline: false },
-				{ name: "User IP", value: ip, inline: false }
+				{ name: "User IP", value: ip, inline: false },
 			],
 			timestamp: new Date(),
 		};
@@ -58,7 +60,7 @@ class DiscordService implements IDiscordService {
 			url: process.env.DISCORD_WEBHOOK_LOG,
 			headers: { "Content-Type": "application/json" },
 			data: JSON.stringify({
-				embeds: [embed]
+				embeds: [embed],
 			}),
 		});
 	}
@@ -75,13 +77,15 @@ class DiscordService implements IDiscordService {
 			url: process.env.DISCORD_WEBHOOK_BANNED,
 			headers: { "Content-Type": "application/json" },
 			data: JSON.stringify({
-				embeds: [{
-					title: "New IP Banned",
-					color: 15548997,
-					type: "rich",
-					fields: [{ name: "IP", value: ip, inline: false }],
-					timestamp: new Date(),
-				}]
+				embeds: [
+					{
+						title: "New IP Banned",
+						color: 15548997,
+						type: "rich",
+						fields: [{ name: "IP", value: ip, inline: false }],
+						timestamp: new Date(),
+					},
+				],
 			}),
 		});
 	}

@@ -4,7 +4,7 @@ import IpUtils from "../utils/IpUtils.js";
 
 class IpsMiddleware {
 	private bannedIps: string[];
-	private actualIpList: { value: string; count: number; }[];
+	private actualIpList: { value: string; count: number }[];
 
 	public constructor() {
 		this.bannedIps = [];

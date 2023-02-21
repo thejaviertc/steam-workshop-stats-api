@@ -35,18 +35,15 @@ class SteamService implements ISteamService {
 				`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${process.env.STEAM_API}&steamids=${steamId}`
 			);
 
-			if (response.data.response.players.length === 0)
-				throw new UsernameNotFoundError();
+			if (response.data.response.players.length === 0) throw new UsernameNotFoundError();
 
 			return {
 				username: response.data.response.players[0].personaname,
-				profileImage: response.data.response.players[0].avatarfull
+				profileImage: response.data.response.players[0].avatarfull,
 			};
 		} catch (error) {
-			if (error instanceof UsernameNotFoundError)
-				throw error;
-			else
-				throw new BasicInfoNotFoundError();
+			if (error instanceof UsernameNotFoundError) throw error;
+			else throw new BasicInfoNotFoundError();
 		}
 	}
 
@@ -101,11 +98,9 @@ class SteamService implements ISteamService {
 			});
 
 			// Sorts addons by release date
-			addonsInfo.addons = addonsInfo.addons.sort(
-				(a: Addon, b: Addon): number => {
-					return b.getId() - a.getId();
-				}
-			);
+			addonsInfo.addons = addonsInfo.addons.sort((a: Addon, b: Addon): number => {
+				return b.getId() - a.getId();
+			});
 		}
 
 		return addonsInfo;

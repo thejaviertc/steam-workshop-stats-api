@@ -13,11 +13,11 @@ class SteamController {
 		try {
 			const url: string = req.query.url;
 
-			if (!SteamUser.isProfileUrlValid(url))
-				throw new UrlNotValidError();
+			if (!SteamUser.isProfileUrlValid(url)) throw new UrlNotValidError();
 
 			// Get the type of url and it's value
-			const pattern = /https:\/\/steamcommunity.com\/(?<type>(id|profiles))\/(?<value>[a-zA-Z0-9]+)\/?/;
+			const pattern =
+				/https:\/\/steamcommunity.com\/(?<type>(id|profiles))\/(?<value>[a-zA-Z0-9]+)\/?/;
 			const regex = pattern.exec(url);
 
 			const urlType = regex.groups.type;
@@ -26,10 +26,12 @@ class SteamController {
 			// Get the value from the URL (if it's profile) or fetch it if not
 			let steamId: string = urlValue;
 
-			if (urlType === "id")
-				steamId = await SteamService.fetchSteamId(urlValue);
+			if (urlType === "id") steamId = await SteamService.fetchSteamId(urlValue);
 
-			const [basicInfo, addonsInfo] = await Promise.all([SteamService.fetchBasicInfo(steamId), SteamService.fetchAddonsInfo(steamId)]);
+			const [basicInfo, addonsInfo] = await Promise.all([
+				SteamService.fetchBasicInfo(steamId),
+				SteamService.fetchAddonsInfo(steamId),
+			]);
 
 			res.send(
 				new SteamUser(
@@ -45,11 +47,9 @@ class SteamController {
 				)
 			);
 
-			if (process.env.NODE_ENV === "production")
-				DiscordService.logQuery(req);
+			if (process.env.NODE_ENV === "production") DiscordService.logQuery(req);
 		} catch (error) {
-			if (process.env.NODE_ENV === "production")
-				DiscordService.logQuery(req, error.message);
+			if (process.env.NODE_ENV === "production") DiscordService.logQuery(req, error.message);
 
 			res.status(error.httpCode).send({ message: error.message });
 		}
