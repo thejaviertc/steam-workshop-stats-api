@@ -11,16 +11,13 @@ class SteamController {
 	 */
 	public async getSteamUser(req, res) {
 		try {
-			let url: string = req.query.url;
+			const url: string = req.query.url;
 
-			if (!SteamUser.isProfileUrlValid(url))
-				throw new UrlNotValidError();
-
-			if (url.endsWith("/"))
-				url = url.substring(0, url.length - 1);
+			if (!SteamUser.isProfileUrlValid(url)) throw new UrlNotValidError();
 
 			// Get the type of url and it's value
-			const pattern = /https:\/\/steamcommunity.com\/(?<type>.*)\/(?<value>.*)/;
+			const pattern =
+				/https:\/\/steamcommunity.com\/(?<type>(id|profiles))\/(?<value>[a-zA-Z0-9]+)\/?/;
 			const regex = pattern.exec(url);
 
 			const urlType = regex.groups.type;
@@ -29,9 +26,8 @@ class SteamController {
 			// Get the value from the URL (if it's profile) or fetch it if not
 			let steamId: string = urlValue;
 
-			if (urlType === "id")
-				steamId = await SteamService.fetchSteamId(urlValue);
-
+			if (urlType === "id") steamId = await SteamService.fetchSteamId(urlValue);
+			
 			const [basicInfo, addonsInfo] = await Promise.all([SteamService.fetchBasicInfo(steamId), SteamService.fetchAddonsInfo(steamId)]);
 
 			res.send(
