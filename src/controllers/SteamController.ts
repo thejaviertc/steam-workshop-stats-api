@@ -27,8 +27,11 @@ class SteamController {
 			let steamId: string = urlValue;
 
 			if (urlType === "id") steamId = await SteamService.fetchSteamId(urlValue);
-			
-			const [basicInfo, addonsInfo] = await Promise.all([SteamService.fetchBasicInfo(steamId), SteamService.fetchAddonsInfo(steamId)]);
+
+			const [basicInfo, addonsInfo] = await Promise.all([
+				SteamService.fetchBasicInfo(steamId),
+				SteamService.fetchAddonsInfo(steamId),
+			]);
 
 			res.send(
 				new SteamUser(

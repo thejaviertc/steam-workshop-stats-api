@@ -17,7 +17,5 @@ module.exports = {
 			},
 		],
 	},
-	transformIgnorePatterns: [
-		"node_modules/(?!@ngrx|(?!deck.gl)|ng-dynamic)"
-	]
+	transformIgnorePatterns: ["node_modules/(?!@ngrx|(?!deck.gl)|ng-dynamic)"],
 };

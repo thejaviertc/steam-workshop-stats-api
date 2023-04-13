@@ -16,10 +16,8 @@ class DatabaseService implements IDatabaseService {
 	 */
 	public async isIpInDatabase(ip: string): Promise<boolean> {
 		return (
-			(await this.database
-				.db("bannedIps")
-				.collection("bannedIps")
-				.findOne({ ip: ip })) != null
+			(await this.database.db("bannedIps").collection("bannedIps").findOne({ ip: ip })) !=
+			null
 		);
 	}
 

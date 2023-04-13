@@ -1,7 +1,7 @@
 import IIpUtils from "./IIpUtils";
 
 class IpUtils implements IIpUtils {
-	private ips: { value: string; count: number; }[];
+	private ips: { value: string; count: number }[];
 
 	public constructor() {
 		this.ips = [];
@@ -60,7 +60,8 @@ class IpUtils implements IIpUtils {
 			req.headers["cf-connecting-ip"] ||
 			req.headers["x-real-ip"] ||
 			req.headers["x-forwarded-for"] ||
-			req.connection.remoteAddress || ""
+			req.connection.remoteAddress ||
+			""
 		).split(",");
 
 		return ips[0].trim();
