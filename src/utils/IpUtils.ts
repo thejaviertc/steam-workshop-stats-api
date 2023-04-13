@@ -1,4 +1,5 @@
-import IIpUtils from "./IIpUtils";
+import { Request } from "express";
+import IIpUtils from "./IIpUtils.js";
 
 class IpUtils implements IIpUtils {
 	private ips: { value: string; count: number }[];
@@ -55,16 +56,23 @@ class IpUtils implements IIpUtils {
 	 * @param req
 	 * @returns string
 	 */
-	public static getIpFromRequest(req): string {
-		const ips = (
+	public static getIpFromRequest(req: Request): string {
+		let ips =
 			req.headers["cf-connecting-ip"] ||
 			req.headers["x-real-ip"] ||
 			req.headers["x-forwarded-for"] ||
-			req.connection.remoteAddress ||
-			""
-		).split(",");
+			req.socket.remoteAddress ||
+			"";
 
-		return ips[0].trim();
+		if (typeof ips === "string") {
+			ips = ips.split(",");
+		}
+
+		if (Array.isArray(ips)) {
+			return ips[0].trim();
+		}
+
+		return ips;
 	}
 }
 
