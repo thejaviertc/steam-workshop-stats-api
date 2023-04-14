@@ -18,7 +18,7 @@ class SteamController {
 
 			// Get the type of url and it's value
 			const pattern =
-				/https:\/\/steamcommunity.com\/(?<type>(id|profiles))\/(?<value>[a-zA-Z0-9]+)\/?/;
+				/https:\/\/steamcommunity.com\/(?<type>(id|profiles))\/(?<value>\w+)\/?/;
 			const regex = pattern.exec(url);
 
 			const urlType = regex?.groups?.type;
