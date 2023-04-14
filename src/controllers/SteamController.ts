@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import CustomError from "../errors/CustomError.js";
 import UrlNotValidError from "../errors/UrlNotValidError.js";
 import SteamUser from "../models/SteamUser.js";
 import DiscordService from "../services/DiscordService.js";
@@ -49,9 +50,15 @@ class SteamController {
 			);
 
 			if (process.env.NODE_ENV === "production") DiscordService.logQuery(req);
-		} catch (error: any) {
-			if (process.env.NODE_ENV === "production") DiscordService.logQuery(req, error.message);
-			res.status(error.httpCode).send({ message: error.message });
+		} catch (error) {
+			if (error instanceof CustomError) {
+				if (process.env.NODE_ENV === "production")
+					DiscordService.logQuery(req, error.message);
+
+				res.status(error.httpCode).send({ message: error.message });
+			}
+
+			throw error;
 		}
 	}
 }
