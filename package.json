@@ -31,6 +31,6 @@
 		"dev": "NODE_ENV=development nodemon -e ts --exec \"npm run build && npm start\"",
 		"test": "jest",
 		"test:watch": "jest --watch",
-		"test:coverage": "jest --coverage --collectCoverageFrom='./src/**'"
+		"test:coverage": "jest --coverage"
 	}
 }
