@@ -15,7 +15,9 @@ class SteamController {
 		try {
 			const url: string = req.query.url as string;
 
-			if (!SteamUser.isProfileUrlValid(url)) throw new UrlNotValidError();
+			if (!SteamUser.isProfileUrlValid(url)) {
+				throw new UrlNotValidError();
+			}
 
 			// Get the type of url and it's value
 			const pattern =
@@ -28,7 +30,9 @@ class SteamController {
 			// Get the value from the URL (if it's profile) or fetch it if not
 			let steamId: string = urlValue;
 
-			if (urlType === "id") steamId = await SteamService.fetchSteamId(urlValue);
+			if (urlType === "id") {
+				steamId = await SteamService.fetchSteamId(urlValue);
+			}
 
 			const [basicInfo, addonsInfo] = await Promise.all([
 				SteamService.fetchBasicInfo(steamId),
@@ -49,11 +53,14 @@ class SteamController {
 				)
 			);
 
-			if (process.env.NODE_ENV === "production") DiscordService.logQuery(req);
+			if (process.env.NODE_ENV === "production") {
+				DiscordService.logQuery(req);
+			}
 		} catch (error) {
 			if (error instanceof CustomError) {
-				if (process.env.NODE_ENV === "production")
+				if (process.env.NODE_ENV === "production") {
 					DiscordService.logQuery(req, error.message);
+				}
 
 				res.status(error.httpCode).send({ message: error.message });
 			}

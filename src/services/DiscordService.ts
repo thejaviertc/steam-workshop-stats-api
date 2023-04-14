@@ -53,8 +53,9 @@ class DiscordService implements IDiscordService {
 			timestamp: new Date(),
 		};
 
-		if (invalidReason)
+		if (invalidReason) {
 			embed.fields.push({ name: "Reason", value: invalidReason, inline: false });
+		}
 
 		axios({
 			method: "POST",

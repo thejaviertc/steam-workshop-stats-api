@@ -54,7 +54,9 @@ class IpsMiddleware {
 			return false;
 		}
 
-		return ++this.actualIpList[position].count >= 100;
+		this.actualIpList[position].count++;
+
+		return this.actualIpList[position].count >= 100;
 	}
 
 	/**

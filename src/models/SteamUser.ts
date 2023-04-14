@@ -9,7 +9,7 @@ class SteamUser {
 	private favs: number;
 	private lifeFavs: number;
 	private viewers: number;
-	private addons: Addon[];
+	private readonly addons: Addon[];
 
 	public constructor(
 		steamId: string,
