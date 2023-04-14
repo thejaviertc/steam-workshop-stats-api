@@ -22,10 +22,23 @@ class DatabaseService implements IDatabaseService {
 	}
 
 	/**
-	 * Adds the IP to the database
+	 * Obtains the banned ips from the database
+	 * @returns string[]
+	 */
+	public async getBannedIps(): Promise<string[]> {
+		try {
+			return await this.database.db("bannedIps").collection("bannedIps").distinct("ip");
+		} catch (error) {
+			console.log(error);
+			return [];
+		}
+	}
+
+	/**
+	 * Inserts the banned IP in the database
 	 * @param ip string
 	 */
-	public async addIp(ip: string) {
+	public async insertBannedIp(ip: string) {
 		this.database.db("bannedIps").collection("bannedIps").insertOne({ ip: ip });
 	}
 }
