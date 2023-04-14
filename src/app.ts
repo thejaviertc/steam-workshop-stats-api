@@ -9,6 +9,7 @@ import steamRouter from "./routes/steam.routes.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 import IpsMiddleware from "./middlewares/ips.middleware.js";
 import logMiddleware from "./middlewares/log.middleware.js";
+import DiscordService from "./services/DiscordService.js";
 
 // Express
 const app = express();
@@ -27,4 +28,12 @@ app.use(errorMiddleware);
 
 app.listen(process.env.PORT || 3000, () => {
 	console.log("App running");
+});
+
+process.on("uncaughtException", (error: Error) => {
+	if (process.env.NODE_ENV === "development") {
+		console.log(error.message);
+	} else {
+		DiscordService.logError(error);
+	}
 });

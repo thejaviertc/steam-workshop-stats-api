@@ -14,7 +14,7 @@ class DiscordService implements IDiscordService {
 
 		axios({
 			method: "POST",
-			url: process.env.DISCORD_WEBHOOK_LOG,
+			url: process.env.DISCORD_WEBHOOK_LOGS,
 			headers: { "Content-Type": "application/json" },
 			data: JSON.stringify({
 				embeds: [
@@ -58,7 +58,7 @@ class DiscordService implements IDiscordService {
 
 		axios({
 			method: "POST",
-			url: process.env.DISCORD_WEBHOOK_LOG,
+			url: process.env.DISCORD_WEBHOOK_LOGS,
 			headers: { "Content-Type": "application/json" },
 			data: JSON.stringify({
 				embeds: [embed],
@@ -75,7 +75,7 @@ class DiscordService implements IDiscordService {
 
 		axios({
 			method: "POST",
-			url: process.env.DISCORD_WEBHOOK_BANNED,
+			url: process.env.DISCORD_WEBHOOK_BANS,
 			headers: { "Content-Type": "application/json" },
 			data: JSON.stringify({
 				embeds: [
@@ -84,6 +84,24 @@ class DiscordService implements IDiscordService {
 						color: 15548997,
 						type: "rich",
 						fields: [{ name: "IP", value: ip, inline: false }],
+						timestamp: new Date(),
+					},
+				],
+			}),
+		});
+	}
+
+	public async logError(error: Error) {
+		axios({
+			method: "POST",
+			url: process.env.DISCORD_WEBHOOK_ERRORS,
+			headers: { "Content-Type": "application/json" },
+			data: JSON.stringify({
+				embeds: [
+					{
+						color: 15548997,
+						type: "rich",
+						fields: [{ name: "Error", value: error.message }],
 						timestamp: new Date(),
 					},
 				],
