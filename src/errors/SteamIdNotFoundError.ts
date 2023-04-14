@@ -1,12 +1,11 @@
-class SteamIdNotFoundError extends Error {
-	__proto__ = Error;
-	public httpCode: number;
+import CustomError from "./CustomError.js";
+
+export default class SteamIdNotFoundError extends CustomError {
+	public httpCode = 500;
+	public message = "Steam API fetching SteamID failed!";
 
 	constructor() {
-		super("Steam API fetching SteamID failed!");
+		super();
 		Object.setPrototypeOf(this, SteamIdNotFoundError.prototype);
-		this.httpCode = 500;
 	}
 }
-
-export default SteamIdNotFoundError;

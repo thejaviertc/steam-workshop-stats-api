@@ -1,12 +1,11 @@
-class UrlNotValidError extends Error {
-	__proto__ = Error;
-	public httpCode: number;
+import CustomError from "./CustomError.js";
+
+export default class UrlNotValidError extends CustomError {
+	public httpCode = 400;
+	public message = "This URL is not valid!";
 
 	constructor() {
-		super("This URL is not valid!");
+		super();
 		Object.setPrototypeOf(this, UrlNotValidError.prototype);
-		this.httpCode = 400;
 	}
 }
-
-export default UrlNotValidError;
