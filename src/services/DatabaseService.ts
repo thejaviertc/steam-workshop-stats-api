@@ -10,18 +10,6 @@ class DatabaseService implements IDatabaseService {
 	}
 
 	/**
-	 * Checks if the IP is inside the database
-	 * @param ip string
-	 * @returns boolean
-	 */
-	public async isIpInDatabase(ip: string): Promise<boolean> {
-		return (
-			(await this.database.db("bannedIps").collection("bannedIps").findOne({ ip: ip })) !=
-			null
-		);
-	}
-
-	/**
 	 * Obtains the banned ips from the database
 	 * @returns string[]
 	 */

@@ -1,5 +1,5 @@
 interface IDatabaseService {
-	isIpInDatabase(ip: string): Promise<boolean>;
+	getBannedIps(): Promise<string[]>;
 	insertBannedIp(ip: string): void;
 }
 
