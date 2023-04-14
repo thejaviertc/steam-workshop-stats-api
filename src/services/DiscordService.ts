@@ -1,13 +1,14 @@
 import axios from "axios";
 import IpUtils from "../utils/IpUtils.js";
 import IDiscordService from "./IDiscordService.js";
+import { Request } from "express";
 
 class DiscordService implements IDiscordService {
 	/**
 	 * Logs the access to any route of the API in Discord
 	 * @param req
 	 */
-	public async logRoute(req) {
+	public async logRoute(req: Request) {
 		const route = req.url;
 		const ip = IpUtils.getIpFromRequest(req);
 
@@ -37,7 +38,7 @@ class DiscordService implements IDiscordService {
 	 * @param req
 	 * @param invalidReason string
 	 */
-	public async logQuery(req, invalidReason?: string) {
+	public async logQuery(req: Request, invalidReason?: string) {
 		const value = req.query.url;
 		const ip = IpUtils.getIpFromRequest(req);
 
@@ -69,7 +70,7 @@ class DiscordService implements IDiscordService {
 	 * Logs the banned ip in Discord
 	 * @param ip string
 	 */
-	public async logBan(req) {
+	public async logBan(req: Request) {
 		const ip = IpUtils.getIpFromRequest(req);
 
 		axios({

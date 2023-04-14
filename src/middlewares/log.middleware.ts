@@ -1,3 +1,4 @@
+import { NextFunction, Request, Response } from "express";
 import DiscordService from "../services/DiscordService.js";
 
 /**
@@ -6,7 +7,7 @@ import DiscordService from "../services/DiscordService.js";
  * @param res
  * @param next
  */
-export default function logMiddleware(req, res, next) {
+export default function logMiddleware(req: Request, res: Response, next: NextFunction) {
 	DiscordService.logRoute(req);
 	next();
 }

@@ -101,8 +101,8 @@ class SteamUser {
 		this.addons.push(addon);
 	}
 
-	public getAddon(id: number): Addon {
-		return this.addons.find((addon) => addon.getId() === id);
+	public getAddon(id: number): Addon | undefined {
+		return this.addons.find((addon: Addon) => addon.getId() === id);
 	}
 
 	public removeAddon(id: number) {

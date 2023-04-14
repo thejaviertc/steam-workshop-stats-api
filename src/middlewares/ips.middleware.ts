@@ -1,10 +1,11 @@
+import { NextFunction, Request, Response } from "express";
 import DatabaseService from "../services/DatabaseService.js";
 import DiscordService from "../services/DiscordService.js";
 import IpUtils from "../utils/IpUtils.js";
 
 const ipUtils = new IpUtils();
 
-export default async function ipsMiddleware(req, res, next) {
+export default async function ipsMiddleware(req: Request, res: Response, next: NextFunction) {
 	const userIp = IpUtils.getIpFromRequest(req);
 
 	if (await DatabaseService.isIpInDatabase(userIp)) {

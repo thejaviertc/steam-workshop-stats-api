@@ -1,4 +1,4 @@
-import SteamUser from "../models/SteamUser";
+import SteamUser from "../models/SteamUser.js";
 
 describe("SteamUser", () => {
 	test("Detects as valid a real profile url with type 'id'", () => {

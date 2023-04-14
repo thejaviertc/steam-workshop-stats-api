@@ -1,11 +1,11 @@
 import { MongoClient } from "mongodb";
-import IDatabaseService from "./IDatabaseService";
+import IDatabaseService from "./IDatabaseService.js";
 
 class DatabaseService implements IDatabaseService {
 	private database: MongoClient;
 
 	public constructor() {
-		this.database = new MongoClient(process.env.MONGO_URL);
+		this.database = new MongoClient(process.env.MONGO_URL as string);
 		this.database.connect();
 	}
 

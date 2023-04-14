@@ -69,11 +69,11 @@ class SteamService implements ISteamService {
 			favs: 0,
 			lifeFavs: 0,
 			viewers: 0,
-			addons: [],
+			addons: [] as Addon[],
 		};
 
 		if (response.data.response.total > 0) {
-			response.data.response.publishedfiledetails.forEach((addon) => {
+			response.data.response.publishedfiledetails.forEach((addon: any) => {
 				addonsInfo.subs += addon.subscriptions;
 				addonsInfo.lifeSubs += addon.lifetime_subscriptions;
 				addonsInfo.favs += addon.favorited;
