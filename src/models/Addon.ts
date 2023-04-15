@@ -7,6 +7,7 @@ class Addon {
 	private readonly favorites: number;
 	private readonly likes: number;
 	private readonly dislikes: number;
+	private readonly stars: number;
 
 	public constructor(
 		id: number,
@@ -16,7 +17,8 @@ class Addon {
 		subscribers: number,
 		favorites: number,
 		likes: number,
-		dislikes: number
+		dislikes: number,
+		stars: number
 	) {
 		this.id = id;
 		this.title = title;
@@ -26,6 +28,7 @@ class Addon {
 		this.favorites = favorites;
 		this.likes = likes;
 		this.dislikes = dislikes;
+		this.stars = stars;
 	}
 
 	public getId(): number {

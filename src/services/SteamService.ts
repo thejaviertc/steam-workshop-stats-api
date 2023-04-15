@@ -95,7 +95,11 @@ class SteamService implements ISteamService {
 						addon.subscriptions,
 						addon.favorited,
 						addon.vote_data.votes_up,
-						addon.vote_data.votes_down
+						addon.vote_data.votes_down,
+						this.obtainNumberOfStars(
+							addon.vote_data.votes_up + addon.vote_data.votes_down,
+							addon.vote_data.score
+						)
 					)
 				);
 			});
@@ -107,6 +111,14 @@ class SteamService implements ISteamService {
 		}
 
 		return addonsInfo;
+	}
+
+	private obtainNumberOfStars(numberVotes: number, score: number): number {
+		if (numberVotes >= 25) {
+			return Math.ceil(score * 5);
+		}
+
+		return 0;
 	}
 }
 
