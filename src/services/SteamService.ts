@@ -69,34 +69,32 @@ class SteamService implements ISteamService {
 			throw new AddonsNotFoundError();
 		}
 
+		// TODO: Refactor
 		const addonsInfo = {
-			subs: 0,
-			lifeSubs: 0,
-			favs: 0,
-			lifeFavs: 0,
-			viewers: 0,
+			views: 0,
+			subscribers: 0,
+			favorites: 0,
+			likes: 0,
+			dislikes: 0,
 			addons: [] as Addon[],
 		};
 
 		if (response.data.response.total > 0) {
 			response.data.response.publishedfiledetails.forEach((addon: IAddonListResponse) => {
-				addonsInfo.subs += addon.subscriptions;
-				addonsInfo.lifeSubs += addon.lifetime_subscriptions;
-				addonsInfo.favs += addon.favorited;
-				addonsInfo.lifeFavs += addon.lifetime_favorited;
-				addonsInfo.viewers += addon.views;
+				addonsInfo.views += addon.views;
+				addonsInfo.subscribers += addon.subscriptions;
+				addonsInfo.favorites += addon.favorited;
+				addonsInfo.likes += addon.vote_data.votes_up;
+				addonsInfo.dislikes += addon.vote_data.votes_down;
 
 				addonsInfo.addons.push(
 					new Addon(
 						addon.publishedfileid,
 						addon.title,
 						addon.preview_url,
-						`https://steamcommunity.com/sharedfiles/filedetails/?id=${addon.publishedfileid}`,
-						addon.subscriptions,
-						addon.lifetime_subscriptions,
-						addon.favorited,
-						addon.lifetime_favorited,
 						addon.views,
+						addon.subscriptions,
+						addon.favorited,
 						addon.vote_data.votes_up,
 						addon.vote_data.votes_down
 					)

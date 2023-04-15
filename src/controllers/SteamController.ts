@@ -44,11 +44,11 @@ class SteamController {
 					steamId,
 					basicInfo.username,
 					basicInfo.profileImage,
-					addonsInfo.subs,
-					addonsInfo.lifeSubs,
-					addonsInfo.favs,
-					addonsInfo.lifeFavs,
-					addonsInfo.viewers,
+					addonsInfo.views,
+					addonsInfo.subscribers,
+					addonsInfo.favorites,
+					addonsInfo.likes,
+					addonsInfo.dislikes,
 					addonsInfo.addons
 				)
 			);
