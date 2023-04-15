@@ -1,12 +1,11 @@
-class UsernameNotFoundError extends Error {
-	__proto__ = Error;
-	public httpCode: number;
+import CustomError from "./CustomError.js";
+
+export default class UsernameNotFoundError extends CustomError {
+	public httpCode = 400;
+	public message = "This username doesn't exists!";
 
 	constructor() {
-		super("This username doesn't exists!");
+		super();
 		Object.setPrototypeOf(this, UsernameNotFoundError.prototype);
-		this.httpCode = 400;
 	}
 }
-
-export default UsernameNotFoundError;

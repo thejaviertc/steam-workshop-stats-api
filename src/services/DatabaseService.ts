@@ -1,33 +1,32 @@
 import { MongoClient } from "mongodb";
-import IDatabaseService from "./IDatabaseService";
+import IDatabaseService from "./IDatabaseService.js";
 
 class DatabaseService implements IDatabaseService {
-	private database: MongoClient;
+	private readonly database: MongoClient;
 
 	public constructor() {
-		this.database = new MongoClient(process.env.MONGO_URL);
+		this.database = new MongoClient(process.env.MONGO_URL as string);
 		this.database.connect();
 	}
 
 	/**
-	 * Checks if the IP is inside the database
-	 * @param ip string
-	 * @returns boolean
+	 * Obtains the banned ips from the database
+	 * @returns string[]
 	 */
-	public async isIpInDatabase(ip: string): Promise<boolean> {
-		return (
-			(await this.database
-				.db("bannedIps")
-				.collection("bannedIps")
-				.findOne({ ip: ip })) != null
-		);
+	public async getBannedIps(): Promise<string[]> {
+		try {
+			return await this.database.db("bannedIps").collection("bannedIps").distinct("ip");
+		} catch (error) {
+			console.log(error);
+			return [];
+		}
 	}
 
 	/**
-	 * Adds the IP to the database
+	 * Inserts the banned IP in the database
 	 * @param ip string
 	 */
-	public async addIp(ip: string) {
+	public async insertBannedIp(ip: string) {
 		this.database.db("bannedIps").collection("bannedIps").insertOne({ ip: ip });
 	}
 }

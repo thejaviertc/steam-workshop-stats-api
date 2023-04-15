@@ -1,12 +1,11 @@
-class BasicInfoNotFoundError extends Error {
-	__proto__ = Error;
-	public httpCode: number;
+import CustomError from "./CustomError.js";
+
+export default class BasicInfoNotFoundError extends CustomError {
+	public httpCode = 500;
+	public message = "Steam API fetching basic info failed!";
 
 	constructor() {
-		super("Steam API fetching basic info failed!");
+		super();
 		Object.setPrototypeOf(this, BasicInfoNotFoundError.prototype);
-		this.httpCode = 500;
 	}
 }
-
-export default BasicInfoNotFoundError;

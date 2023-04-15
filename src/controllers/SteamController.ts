@@ -1,3 +1,5 @@
+import { Request, Response } from "express";
+import CustomError from "../errors/CustomError.js";
 import UrlNotValidError from "../errors/UrlNotValidError.js";
 import SteamUser from "../models/SteamUser.js";
 import DiscordService from "../services/DiscordService.js";
@@ -9,45 +11,61 @@ class SteamController {
 	 * @param req
 	 * @param res
 	 */
-	public async getSteamUser(req, res) {
+	public async getSteamUser(req: Request, res: Response) {
 		try {
-			const url: string = req.query.url;
+			const url: string = req.query.url as string;
 
-			if (!SteamUser.isProfileUrlValid(url)) throw new UrlNotValidError();
+			if (!SteamUser.isProfileUrlValid(url)) {
+				throw new UrlNotValidError();
+			}
 
 			// Get the type of url and it's value
 			const pattern =
-				/https:\/\/steamcommunity.com\/(?<type>(id|profiles))\/(?<value>[a-zA-Z0-9]+)\/?/;
+				/https:\/\/steamcommunity.com\/(?<type>(id|profiles))\/(?<value>\w+)\/?/;
 			const regex = pattern.exec(url);
 
-			const urlType = regex.groups.type;
-			const urlValue = regex.groups.value;
+			const urlType = regex?.groups?.type;
+			const urlValue = regex?.groups?.value ?? "";
 
 			// Get the value from the URL (if it's profile) or fetch it if not
 			let steamId: string = urlValue;
 
-			if (urlType === "id") steamId = await SteamService.fetchSteamId(urlValue);
-			
-			const [basicInfo, addonsInfo] = await Promise.all([SteamService.fetchBasicInfo(steamId), SteamService.fetchAddonsInfo(steamId)]);
+			if (urlType === "id") {
+				steamId = await SteamService.fetchSteamId(urlValue);
+			}
+
+			const [basicInfo, addonsInfo] = await Promise.all([
+				SteamService.fetchBasicInfo(steamId),
+				SteamService.fetchAddonsInfo(steamId),
+			]);
 
 			res.send(
 				new SteamUser(
 					steamId,
 					basicInfo.username,
 					basicInfo.profileImage,
-					addonsInfo.subs,
-					addonsInfo.lifeSubs,
-					addonsInfo.favs,
-					addonsInfo.lifeFavs,
-					addonsInfo.viewers,
+					addonsInfo.views,
+					addonsInfo.subscribers,
+					addonsInfo.favorites,
+					addonsInfo.likes,
+					addonsInfo.dislikes,
 					addonsInfo.addons
 				)
 			);
 
-			DiscordService.logQuery(req);
+			if (process.env.NODE_ENV === "production") {
+				DiscordService.logQuery(req);
+			}
 		} catch (error) {
-			DiscordService.logQuery(req, error.message);
-			res.status(error.httpCode).send({ message: error.message });
+			if (error instanceof CustomError) {
+				if (process.env.NODE_ENV === "production") {
+					DiscordService.logQuery(req, error.message);
+				}
+
+				res.status(error.httpCode).send({ message: error.message });
+			}
+
+			throw error;
 		}
 	}
 }

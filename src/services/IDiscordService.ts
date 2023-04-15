@@ -1,7 +1,9 @@
+import { Request } from "express";
+
 interface IDiscordService {
-	logRoute(req);
-	logQuery(req, invalidReason?: string);
-	logBan(req);
+	logRoute(req: Request): void;
+	logQuery(req: Request, invalidReason?: string): void;
+	logBan(req: Request): void;
 }
 
 export default IDiscordService;

@@ -1,31 +1,34 @@
 import axios from "axios";
 import IpUtils from "../utils/IpUtils.js";
 import IDiscordService from "./IDiscordService.js";
+import { Request } from "express";
 
 class DiscordService implements IDiscordService {
 	/**
 	 * Logs the access to any route of the API in Discord
 	 * @param req
 	 */
-	public async logRoute(req) {
+	public async logRoute(req: Request) {
 		const route = req.url;
 		const ip = IpUtils.getIpFromRequest(req);
 
 		axios({
 			method: "POST",
-			url: process.env.DISCORD_WEBHOOK_LOG,
+			url: process.env.DISCORD_WEBHOOK_LOGS,
 			headers: { "Content-Type": "application/json" },
 			data: JSON.stringify({
-				embeds: [{
-					title: "Route Access",
-					color: 10070709,
-					type: "rich",
-					fields: [
-						{ name: "Route", value: route, inline: false },
-						{ name: "User IP", value: ip, inline: false }
-					],
-					timestamp: new Date(),
-				}]
+				embeds: [
+					{
+						title: "Route Access",
+						color: 10070709,
+						type: "rich",
+						fields: [
+							{ name: "Route", value: route, inline: false },
+							{ name: "User IP", value: ip, inline: false },
+						],
+						timestamp: new Date(),
+					},
+				],
 			}),
 		});
 	}
@@ -35,7 +38,7 @@ class DiscordService implements IDiscordService {
 	 * @param req
 	 * @param invalidReason string
 	 */
-	public async logQuery(req, invalidReason?: string) {
+	public async logQuery(req: Request, invalidReason?: string) {
 		const value = req.query.url;
 		const ip = IpUtils.getIpFromRequest(req);
 
@@ -45,20 +48,21 @@ class DiscordService implements IDiscordService {
 			type: "rich",
 			fields: [
 				{ name: "Value", value: value, inline: false },
-				{ name: "User IP", value: ip, inline: false }
+				{ name: "User IP", value: ip, inline: false },
 			],
 			timestamp: new Date(),
 		};
 
-		if (invalidReason)
+		if (invalidReason) {
 			embed.fields.push({ name: "Reason", value: invalidReason, inline: false });
+		}
 
 		axios({
 			method: "POST",
-			url: process.env.DISCORD_WEBHOOK_LOG,
+			url: process.env.DISCORD_WEBHOOK_LOGS,
 			headers: { "Content-Type": "application/json" },
 			data: JSON.stringify({
-				embeds: [embed]
+				embeds: [embed],
 			}),
 		});
 	}
@@ -67,21 +71,41 @@ class DiscordService implements IDiscordService {
 	 * Logs the banned ip in Discord
 	 * @param ip string
 	 */
-	public async logBan(req) {
+	public async logBan(req: Request) {
 		const ip = IpUtils.getIpFromRequest(req);
 
 		axios({
 			method: "POST",
-			url: process.env.DISCORD_WEBHOOK_BANNED,
+			url: process.env.DISCORD_WEBHOOK_BANS,
 			headers: { "Content-Type": "application/json" },
 			data: JSON.stringify({
-				embeds: [{
-					title: "New IP Banned",
-					color: 15548997,
-					type: "rich",
-					fields: [{ name: "IP", value: ip, inline: false }],
-					timestamp: new Date(),
-				}]
+				embeds: [
+					{
+						title: "New IP Banned",
+						color: 15548997,
+						type: "rich",
+						fields: [{ name: "IP", value: ip, inline: false }],
+						timestamp: new Date(),
+					},
+				],
+			}),
+		});
+	}
+
+	public async logError(error: Error) {
+		axios({
+			method: "POST",
+			url: process.env.DISCORD_WEBHOOK_ERRORS,
+			headers: { "Content-Type": "application/json" },
+			data: JSON.stringify({
+				embeds: [
+					{
+						color: 15548997,
+						type: "rich",
+						fields: [{ name: "Error", value: error.message }],
+						timestamp: new Date(),
+					},
+				],
 			}),
 		});
 	}

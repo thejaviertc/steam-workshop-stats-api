@@ -1,6 +1,6 @@
 interface IDatabaseService {
-	isIpInDatabase(ip: string): Promise<boolean>;
-	addIp(ip: string);
+	getBannedIps(): Promise<string[]>;
+	insertBannedIp(ip: string): void;
 }
 
 export default IDatabaseService;
