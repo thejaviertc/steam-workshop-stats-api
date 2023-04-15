@@ -4,32 +4,32 @@ class SteamUser {
 	private readonly steamId: string;
 	private readonly username: string;
 	private readonly profileImage: string;
-	private readonly subs: number;
-	private readonly lifeSubs: number;
-	private readonly favs: number;
-	private readonly lifeFavs: number;
-	private readonly viewers: number;
+	private readonly views: number;
+	private readonly subscribers: number;
+	private readonly favorites: number;
+	private readonly likes: number;
+	private readonly dislikes: number;
 	private readonly addons: Addon[];
 
 	public constructor(
 		steamId: string,
 		username: string,
 		profileImage: string,
-		subs: number,
-		lifeSubs: number,
-		favs: number,
-		lifeFavs: number,
-		viewers: number,
+		views: number,
+		subscribers: number,
+		favorites: number,
+		likes: number,
+		dislikes: number,
 		addons: Addon[]
 	) {
 		this.steamId = steamId;
 		this.username = username;
 		this.profileImage = profileImage;
-		this.subs = subs;
-		this.lifeSubs = lifeSubs;
-		this.favs = favs;
-		this.lifeFavs = lifeFavs;
-		this.viewers = viewers;
+		this.views = views;
+		this.subscribers = subscribers;
+		this.favorites = favorites;
+		this.likes = likes;
+		this.dislikes = dislikes;
 		this.addons = addons;
 	}
 
