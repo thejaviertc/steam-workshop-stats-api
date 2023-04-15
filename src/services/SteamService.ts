@@ -69,7 +69,6 @@ class SteamService implements ISteamService {
 			throw new AddonsNotFoundError();
 		}
 
-		// TODO: Refactor
 		const addonsInfo = {
 			views: 0,
 			subscribers: 0,
