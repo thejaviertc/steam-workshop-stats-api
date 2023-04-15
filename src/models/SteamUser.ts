@@ -1,14 +1,14 @@
 import Addon from "./Addon.js";
 
 class SteamUser {
-	private steamId: string;
-	private username: string;
-	private profileImage: string;
-	private subs: number;
-	private lifeSubs: number;
-	private favs: number;
-	private lifeFavs: number;
-	private viewers: number;
+	private readonly steamId: string;
+	private readonly username: string;
+	private readonly profileImage: string;
+	private readonly subs: number;
+	private readonly lifeSubs: number;
+	private readonly favs: number;
+	private readonly lifeFavs: number;
+	private readonly viewers: number;
 	private readonly addons: Addon[];
 
 	public constructor(
@@ -31,89 +31,6 @@ class SteamUser {
 		this.lifeFavs = lifeFavs;
 		this.viewers = viewers;
 		this.addons = addons;
-	}
-
-	public getSteamId(): string {
-		return this.steamId;
-	}
-
-	public setSteamId(steamId: string) {
-		this.steamId = steamId;
-	}
-
-	public getUsername(): string {
-		return this.username;
-	}
-
-	public setUsername(username: string) {
-		this.username = username;
-	}
-
-	public getProfileImage(): string {
-		return this.profileImage;
-	}
-
-	public setProfileImage(profileImage: string) {
-		this.profileImage = profileImage;
-	}
-
-	public getSubs(): number {
-		return this.subs;
-	}
-
-	public setSubs(subs: number) {
-		this.subs = subs;
-	}
-
-	public getLifeSubs(): number {
-		return this.lifeSubs;
-	}
-
-	public setLifeSubs(lifeSubs: number) {
-		this.lifeSubs = lifeSubs;
-	}
-
-	public getFavs(): number {
-		return this.favs;
-	}
-
-	public setFavs(favs: number) {
-		this.favs = favs;
-	}
-
-	public getLifeFavs(): number {
-		return this.lifeFavs;
-	}
-
-	public setLifeFavs(lifeFavs: number) {
-		this.lifeFavs = lifeFavs;
-	}
-
-	public getViewers(): number {
-		return this.viewers;
-	}
-
-	public setViewers(viewers: number) {
-		this.viewers = viewers;
-	}
-
-	public addAddon(addon: Addon) {
-		this.addons.push(addon);
-	}
-
-	public getAddon(id: number): Addon | undefined {
-		return this.addons.find((addon: Addon) => addon.getId() === id);
-	}
-
-	public removeAddon(id: number) {
-		let found = false;
-
-		for (let i = 0; i < this.addons.length && found; i++) {
-			if (this.addons[i].getId() === id) {
-				this.addons.splice(i, 1);
-				found = true;
-			}
-		}
 	}
 
 	/**
