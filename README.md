@@ -1,4 +1,4 @@
-<h1 align="center">Javiertc's API</h1>
+<h1 align="center">Steam Workshop Stats API</h1>
 <h2 align="center">
     Custom API for my <a href="https://github.com/thejaviertc/steam-workshop-stats">Steam Workshop Stats</a> project
 </h2>
@@ -18,4 +18,4 @@ Contributions towards the project are welcomed. Some ways you can contribute inc
 
 ## Suggestions/Bugs:
 
-Do you have a suggestion or you discover a bug? Make an [issue](https://github.com/thejaviertc/javiertcs-api/issues/new).
+Do you have a suggestion or you discover a bug? Make an [issue](https://github.com/thejaviertc/steam-workshop-stats-api/issues/new).
