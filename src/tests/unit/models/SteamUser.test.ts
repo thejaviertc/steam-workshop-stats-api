@@ -1,8 +1,19 @@
-import SteamUser from "../models/SteamUser";
+import SteamUser from "../../../models/SteamUser.js";
 
 describe("SteamUser", () => {
+	test("Creates a new object", () => {
+		const steamUser = new SteamUser("", "", "", 1, 2, 3, 4, 5, []);
+		expect(steamUser).toBeInstanceOf(SteamUser);
+	});
+
 	test("Detects as valid a real profile url with type 'id'", () => {
 		expect(SteamUser.isProfileUrlValid("https://steamcommunity.com/id/javiertc")).toBeTruthy();
+	});
+
+	test("Detects as valid a real profile url with type 'id' and symbols", () => {
+		expect(
+			SteamUser.isProfileUrlValid("https://steamcommunity.com/id/Chuckleberry_Finn")
+		).toBeTruthy();
 	});
 
 	test("Detects as valid a real profile url with type 'profiles'", () => {

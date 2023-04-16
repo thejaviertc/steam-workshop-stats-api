@@ -36,6 +36,7 @@ import steamRouter from "./routes/steam.routes.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 import IpsMiddleware from "./middlewares/ips.middleware.js";
 import logMiddleware from "./middlewares/log.middleware.js";
+import DiscordService from "./services/DiscordService.js";
 
 // Express
 const app = express();
@@ -99,4 +100,14 @@ function ensureAuthenticated(req, res, next) {
 app.use("/steam-workshop-stats", steamRouter);
 app.use(errorMiddleware);
 
-export default app;
+app.listen(process.env.PORT || 3000, () => {
+	console.log("App running");
+});
+
+process.on("uncaughtException", (error: Error) => {
+	if (process.env.NODE_ENV === "development") {
+		console.log(error.message);
+	} else {
+		DiscordService.logError(error);
+	}
+});

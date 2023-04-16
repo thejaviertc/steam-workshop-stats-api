@@ -1,21 +1,12 @@
-import pg from "pg";
-const { Pool } = pg;
-import IDatabaseService from "./IDatabaseService";
+import { MongoClient } from "mongodb";
+import IDatabaseService from "./IDatabaseService.js";
 
 class DatabaseService implements IDatabaseService {
-	private database;
+	private readonly database: MongoClient;
 
 	public constructor() {
-		this.database = new Pool({
-			user: process.env.DATABASE_USERNAME,
-			host: process.env.DATABASE_HOST,
-			database: process.env.DATABASE_NAME,
-			password: process.env.DATABASE_PASSWORD,
-			port: process.env.DATABASE_PORT,
-			ssl: {
-				rejectUnauthorized: false,
-			},
-		});
+		this.database = new MongoClient(process.env.MONGO_URL as string);
+		this.database.connect();
 	}
 
 	/**
@@ -24,17 +15,10 @@ class DatabaseService implements IDatabaseService {
 	 */
 	public async getBannedIps(): Promise<string[]> {
 		try {
-			const result = await this.database.query("SELECT ip FROM banned_ip");
-
-			const bannedIps = [];
-
-			result.rows.forEach((value) => {
-				bannedIps.push(value.ip);
-			});
-
-			return bannedIps;
+			return await this.database.db("bannedIps").collection("bannedIps").distinct("ip");
 		} catch (error) {
 			console.log(error);
+			return [];
 		}
 	}
 
@@ -43,11 +27,7 @@ class DatabaseService implements IDatabaseService {
 	 * @param ip string
 	 */
 	public async insertBannedIp(ip: string) {
-		try {
-			await this.database.query("INSERT INTO banned_ip (ip) VALUES ($1)", [ip]);
-		} catch (error) {
-			console.log(error);
-		}
+		this.database.db("bannedIps").collection("bannedIps").insertOne({ ip: ip });
 	}
 }
 

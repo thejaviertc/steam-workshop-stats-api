@@ -4,6 +4,7 @@ import BasicInfoNotFoundError from "../errors/BasicInfoNotFoundError.js";
 import SteamIdNotFoundError from "../errors/SteamIdNotFoundError.js";
 import UsernameNotFoundError from "../errors/UsernameNotFoundError.js";
 import Addon from "../models/Addon.js";
+import IAddonListResponse from "./IAddonListResponse.js";
 import ISteamService from "./ISteamService.js";
 
 class SteamService implements ISteamService {
@@ -35,15 +36,20 @@ class SteamService implements ISteamService {
 				`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${process.env.STEAM_API}&steamids=${steamId}`
 			);
 
-			if (response.data.response.players.length === 0) throw new UsernameNotFoundError();
+			if (response.data.response.players.length === 0) {
+				throw new UsernameNotFoundError();
+			}
 
 			return {
 				username: response.data.response.players[0].personaname,
 				profileImage: response.data.response.players[0].avatarfull,
 			};
 		} catch (error) {
-			if (error instanceof UsernameNotFoundError) throw error;
-			else throw new BasicInfoNotFoundError();
+			if (error instanceof UsernameNotFoundError) {
+				throw error;
+			}
+
+			throw new BasicInfoNotFoundError();
 		}
 	}
 
@@ -64,46 +70,55 @@ class SteamService implements ISteamService {
 		}
 
 		const addonsInfo = {
-			subs: 0,
-			lifeSubs: 0,
-			favs: 0,
-			lifeFavs: 0,
-			viewers: 0,
-			addons: [],
+			views: 0,
+			subscribers: 0,
+			favorites: 0,
+			likes: 0,
+			dislikes: 0,
+			addons: [] as Addon[],
 		};
 
 		if (response.data.response.total > 0) {
-			response.data.response.publishedfiledetails.forEach((addon) => {
-				addonsInfo.subs += addon.subscriptions;
-				addonsInfo.lifeSubs += addon.lifetime_subscriptions;
-				addonsInfo.favs += addon.favorited;
-				addonsInfo.lifeFavs += addon.lifetime_favorited;
-				addonsInfo.viewers += addon.views;
+			response.data.response.publishedfiledetails.forEach((addon: IAddonListResponse) => {
+				addonsInfo.views += addon.views;
+				addonsInfo.subscribers += addon.subscriptions;
+				addonsInfo.favorites += addon.favorited;
+				addonsInfo.likes += addon.vote_data.votes_up;
+				addonsInfo.dislikes += addon.vote_data.votes_down;
 
 				addonsInfo.addons.push(
 					new Addon(
 						addon.publishedfileid,
 						addon.title,
 						addon.preview_url,
-						`https://steamcommunity.com/sharedfiles/filedetails/?id=${addon.publishedfileid}`,
-						addon.subscriptions,
-						addon.lifetime_subscriptions,
-						addon.favorited,
-						addon.lifetime_favorited,
 						addon.views,
+						addon.subscriptions,
+						addon.favorited,
 						addon.vote_data.votes_up,
-						addon.vote_data.votes_down
+						addon.vote_data.votes_down,
+						this.obtainNumberOfStars(
+							addon.vote_data.votes_up + addon.vote_data.votes_down,
+							addon.vote_data.score
+						)
 					)
 				);
 			});
 
 			// Sorts addons by release date
-			addonsInfo.addons = addonsInfo.addons.sort((a: Addon, b: Addon): number => {
+			addonsInfo.addons.sort((a: Addon, b: Addon): number => {
 				return b.getId() - a.getId();
 			});
 		}
 
 		return addonsInfo;
+	}
+
+	private obtainNumberOfStars(numberVotes: number, score: number): number {
+		if (numberVotes >= 25) {
+			return Math.ceil(score * 5);
+		}
+
+		return 0;
 	}
 }
 

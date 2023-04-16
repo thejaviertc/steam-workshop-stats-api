@@ -1,3 +1,4 @@
+import { NextFunction, Request, Response } from "express";
 import DatabaseService from "../services/DatabaseService.js";
 import DiscordService from "../services/DiscordService.js";
 import IpUtils from "../utils/IpUtils.js";
@@ -53,7 +54,9 @@ class IpsMiddleware {
 			return false;
 		}
 
-		return ++this.actualIpList[position].count >= 100;
+		this.actualIpList[position].count++;
+
+		return this.actualIpList[position].count >= 100;
 	}
 
 	/**
@@ -63,7 +66,7 @@ class IpsMiddleware {
 	 * @param next
 	 * @returns
 	 */
-	public async processQuery(req, res, next) {
+	public async processQuery(req: Request, res: Response, next: NextFunction) {
 		const ip = IpUtils.getIpFromRequest(req);
 
 		if (this.bannedIps.includes(ip)) {

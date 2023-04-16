@@ -1,128 +1,38 @@
 class Addon {
-	private id: number;
-	private title: string;
-	private image: string;
-	private url: string;
-	private subs: number;
-	private lifeSubs: number;
-	private favs: number;
-	private lifeFavs: number;
-	private viewers: number;
-	private likes: number;
-	private dislikes: number;
+	private readonly id: number;
+	private readonly title: string;
+	private readonly image: string;
+	private readonly views: number;
+	private readonly subscribers: number;
+	private readonly favorites: number;
+	private readonly likes: number;
+	private readonly dislikes: number;
+	private readonly stars: number;
 
 	public constructor(
 		id: number,
 		title: string,
 		image: string,
-		url: string,
-		subs: number,
-		lifeSubs: number,
-		favs: number,
-		lifeFavs: number,
-		viewers: number,
+		views: number,
+		subscribers: number,
+		favorites: number,
 		likes: number,
-		dislikes: number
+		dislikes: number,
+		stars: number
 	) {
 		this.id = id;
 		this.title = title;
 		this.image = image;
-		this.url = url;
-		this.subs = subs;
-		this.lifeSubs = lifeSubs;
-		this.favs = favs;
-		this.lifeFavs = lifeFavs;
-		this.viewers = viewers;
+		this.views = views;
+		this.subscribers = subscribers;
+		this.favorites = favorites;
 		this.likes = likes;
 		this.dislikes = dislikes;
+		this.stars = stars;
 	}
 
 	public getId(): number {
 		return this.id;
-	}
-
-	public setId(id: number) {
-		this.id = id;
-	}
-
-	public getTitle(): string {
-		return this.title;
-	}
-
-	public setTitle(title: string) {
-		this.title = title;
-	}
-
-	public getImage(): string {
-		return this.image;
-	}
-
-	public setImage(image: string) {
-		this.image = image;
-	}
-
-	public getUrl(): string {
-		return this.url;
-	}
-
-	public setUrl(url: string) {
-		this.url = url;
-	}
-
-	public getSubs(): number {
-		return this.subs;
-	}
-
-	public setSubs(subs: number) {
-		this.subs = subs;
-	}
-
-	public getLifeSubs(): number {
-		return this.lifeSubs;
-	}
-
-	public setLifeSubs(lifeSubs: number) {
-		this.lifeSubs = lifeSubs;
-	}
-
-	public getFavs(): number {
-		return this.favs;
-	}
-
-	public setFavs(favs: number) {
-		this.favs = favs;
-	}
-
-	public getLifeFavs(): number {
-		return this.lifeFavs;
-	}
-
-	public setLifeFavs(lifeFavs: number) {
-		this.lifeFavs = lifeFavs;
-	}
-
-	public getViewers(): number {
-		return this.viewers;
-	}
-
-	public setViewers(viewers: number) {
-		this.viewers = viewers;
-	}
-
-	public getLikes(): number {
-		return this.likes;
-	}
-
-	public setLikes(likes: number) {
-		this.likes = likes;
-	}
-
-	public getDislikes(): number {
-		return this.dislikes;
-	}
-
-	public setDislikes(dislikes: number) {
-		this.dislikes = dislikes;
 	}
 }
 

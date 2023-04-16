@@ -1,12 +1,11 @@
-class AddonsNotFoundError extends Error {
-	__proto__ = Error;
-	public httpCode: number;
+import CustomError from "./CustomError.js";
+
+export default class AddonsNotFoundError extends CustomError {
+	public message = "Steam API fetching addon info failed! (Probably this user doesn't exists)";
+	public httpCode = 500;
 
 	constructor() {
-		super("Steam API fetching addon info failed! (Probably this user doesn't exists)");
+		super();
 		Object.setPrototypeOf(this, AddonsNotFoundError.prototype);
-		this.httpCode = 500;
 	}
 }
-
-export default AddonsNotFoundError;
