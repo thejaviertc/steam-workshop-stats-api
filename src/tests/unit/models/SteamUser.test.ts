@@ -28,7 +28,7 @@ describe("SteamUser", () => {
 
 	test("Detects as invalid a string that is similar to a real one", () => {
 		expect(
-			SteamUser.isProfileUrlValid("http://steamcommunity.com/something/asdoas")
+			SteamUser.isProfileUrlValid("https://steamcommunity.com/something/asdoas")
 		).toBeFalsy();
 	});
 });
