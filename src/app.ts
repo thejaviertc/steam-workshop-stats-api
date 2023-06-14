@@ -14,7 +14,7 @@ import DiscordService from "./services/DiscordService.js";
 // Express
 const app = express();
 app.use(express.urlencoded({ extended: false }));
-app.use(cors());
+app.use(cors({ origin: "thejaviertc.github.io" }));
 
 // Express Middlewares
 if (process.env.NODE_ENV === "production") {
