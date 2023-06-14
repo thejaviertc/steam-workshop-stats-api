@@ -7,7 +7,7 @@
     <img src="https://img.shields.io/github/v/release/thejaviertc/javiertcs-api" />
     <img src="https://img.shields.io/github/license/thejaviertc/javiertcs-api" />
     <img src="https://img.shields.io/github/commit-activity/m/thejaviertc/javiertcs-api" />
-    <img src="https://github.com/thejaviertc/javiertcs-api/actions/workflows/ci.yml/badge.svg" />
+    <img src="https://github.com/thejaviertc/steam-workshop-stats-api/actions/workflows/ci.yml/badge.svg" />
 </div>
 
 ## Contributing:
