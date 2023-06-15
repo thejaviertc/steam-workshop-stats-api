@@ -70,13 +70,13 @@ class IpsMiddleware {
 		const ip = IpUtils.getIpFromRequest(req);
 
 		if (this.bannedIps.includes(ip)) {
-			DiscordService.logBan(req);
+			await DiscordService.logBan(req);
 			return res.status(503).send({ message: "You sent too many requests." });
 		}
 
 		if (this.hasReachedLimit(ip)) {
-			DatabaseService.insertBannedIp(ip);
-			DiscordService.logBan(req);
+			await DatabaseService.insertBannedIp(ip);
+			await DiscordService.logBan(req);
 			return res.status(503).send({ message: "You sent too many requests." });
 		}
 

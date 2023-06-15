@@ -12,7 +12,7 @@ class DiscordService implements IDiscordService {
 		const route = req.url;
 		const ip = IpUtils.getIpFromRequest(req);
 
-		axios({
+		await axios({
 			method: "POST",
 			url: process.env.DISCORD_WEBHOOK_LOGS,
 			headers: { "Content-Type": "application/json" },
@@ -57,7 +57,7 @@ class DiscordService implements IDiscordService {
 			embed.fields.push({ name: "Reason", value: invalidReason, inline: false });
 		}
 
-		axios({
+		await axios({
 			method: "POST",
 			url: process.env.DISCORD_WEBHOOK_LOGS,
 			headers: { "Content-Type": "application/json" },
@@ -74,7 +74,7 @@ class DiscordService implements IDiscordService {
 	public async logBan(req: Request) {
 		const ip = IpUtils.getIpFromRequest(req);
 
-		axios({
+		await axios({
 			method: "POST",
 			url: process.env.DISCORD_WEBHOOK_BANS,
 			headers: { "Content-Type": "application/json" },
@@ -93,7 +93,7 @@ class DiscordService implements IDiscordService {
 	}
 
 	public async logError(error: Error) {
-		axios({
+		await axios({
 			method: "POST",
 			url: process.env.DISCORD_WEBHOOK_ERRORS,
 			headers: { "Content-Type": "application/json" },
