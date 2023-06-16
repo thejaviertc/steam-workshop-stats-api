@@ -31,7 +31,7 @@ if (process.env.NODE_ENV === "production") {
 app.use("/steam-workshop-stats", steamRouter);
 app.use(errorMiddleware);
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(process.env.PORT ?? 3000, () => {
 	console.log("App running");
 });
 
