@@ -1,15 +1,17 @@
-name: 💻 CI
+name: 🔨 CI
 
 on:
     push:
-        branches: [main]
+        branches: [dev]
 
 jobs:
-    ci:
+    CI:
         runs-on: ubuntu-latest
         steps:
             - name: 🚚 Get latest code
               uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
 
             - name: 📗 Setup NodeJS
               uses: actions/setup-node@v3
@@ -18,9 +20,14 @@ jobs:
 
             - name: 🔨 Build Project
               run: |
-                  npm install
+                  npm ci
                   npm run build
 
             - name: 🧪 Test Project
-              run: |
-                  npm run test
+              run: npm run test
+
+            - name: 🔎 SonarCloud Scan
+              uses: sonarsource/sonarcloud-github-action@master
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

@@ -7,7 +7,7 @@ import DiscordService from "../services/DiscordService.js";
  * @param res
  * @param next
  */
-export default function logMiddleware(req: Request, _res: Response, next: NextFunction) {
-	DiscordService.logRoute(req);
+export default async function logMiddleware(req: Request, _res: Response, next: NextFunction) {
+	await DiscordService.logRoute(req);
 	next();
 }
