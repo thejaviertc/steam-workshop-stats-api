@@ -1,12 +1,22 @@
-import { MongoClient } from "mongodb";
+import pg from "pg";
 import IDatabaseService from "./IDatabaseService.js";
 
+const { Pool } = pg;
+
 class DatabaseService implements IDatabaseService {
-	private readonly database: MongoClient;
+	private readonly database;
 
 	public constructor() {
-		this.database = new MongoClient(process.env.MONGO_URL as string);
-		this.database.connect();
+		this.database = new Pool({
+			user: process.env.DATABASE_USERNAME,
+			host: process.env.DATABASE_HOST,
+			database: process.env.DATABASE_NAME,
+			password: process.env.DATABASE_PASSWORD,
+			port: process.env.DATABASE_PORT,
+			ssl: {
+				rejectUnauthorized: false,
+			},
+		});
 	}
 
 	/**
