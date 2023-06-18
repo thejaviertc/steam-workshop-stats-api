@@ -1,6 +1,5 @@
 import pg from "pg";
 import IDatabaseService from "./IDatabaseService.js";
-import DiscordService from "./DiscordService.js";
 
 const { Pool } = pg;
 
