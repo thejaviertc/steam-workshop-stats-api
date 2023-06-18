@@ -1,5 +1,6 @@
 import pg from "pg";
 import IDatabaseService from "./IDatabaseService.js";
+import DiscordService from "./DiscordService.js";
 
 const { Pool } = pg;
 
@@ -12,7 +13,7 @@ class DatabaseService implements IDatabaseService {
 			host: process.env.DATABASE_HOST,
 			database: process.env.DATABASE_NAME,
 			password: process.env.DATABASE_PASSWORD,
-			port: process.env.DATABASE_PORT,
+			port: Number(process.env.DATABASE_PORT),
 			ssl: {
 				rejectUnauthorized: false,
 			},
@@ -24,12 +25,14 @@ class DatabaseService implements IDatabaseService {
 	 * @returns string[]
 	 */
 	public async getBannedIps(): Promise<string[]> {
-		try {
-			return await this.database.db("bannedIps").collection("bannedIps").distinct("ip");
-		} catch (error) {
-			console.log(error);
-			return [];
+		const result = await this.database.query("SELECT ip FROM banned_ip");
+		const bannedIps: string[] = [];
+
+		for (const row of result.rows) {
+			bannedIps.push(row.ip);
 		}
+
+		return bannedIps;
 	}
 
 	/**
@@ -37,7 +40,7 @@ class DatabaseService implements IDatabaseService {
 	 * @param ip string
 	 */
 	public async insertBannedIp(ip: string) {
-		this.database.db("bannedIps").collection("bannedIps").insertOne({ ip: ip });
+		await this.database.query("INSERT INTO banned_ip (ip) VALUES ($1)", [ip]);
 	}
 }
 
