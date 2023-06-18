@@ -8,10 +8,10 @@ export default class IpUtils {
 	 */
 	public static getIpFromRequest(req: Request): string {
 		let ips =
-			req.headers["cf-connecting-ip"] ||
-			req.headers["x-real-ip"] ||
-			req.headers["x-forwarded-for"] ||
-			req.socket.remoteAddress ||
+			req.headers["cf-connecting-ip"] ??
+			req.headers["x-real-ip"] ??
+			req.headers["x-forwarded-for"] ??
+			req.socket.remoteAddress ??
 			"";
 
 		if (typeof ips === "string") {
