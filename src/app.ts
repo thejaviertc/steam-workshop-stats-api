@@ -24,16 +24,8 @@ class App {
 		await this.loadMiddlewares();
 
 		this.app.listen(process.env.PORT ?? 3000, () => {
+			// TODO: Log in Discord
 			console.log("App running");
-		});
-
-		process.on("uncaughtException", (error: Error) => {
-			// TODO: Move check to Logger
-			if (process.env.NODE_ENV === "development") {
-				console.log(error.message);
-			} else {
-				DiscordService.logError(error);
-			}
 		});
 	}
 
@@ -76,3 +68,12 @@ class App {
 
 const app = new App();
 await app.start();
+
+process.on("uncaughtException", (error: Error) => {
+	// TODO: Move check to Logger
+	if (process.env.NODE_ENV === "development") {
+		console.log(error.message);
+	} else {
+		DiscordService.logError(error);
+	}
+});
