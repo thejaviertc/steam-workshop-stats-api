@@ -1,44 +1,78 @@
-// Imports
 import cors from "cors";
-import express from "express";
-
-// Routes
-import steamRouter from "./routes/steam.routes.js";
-
-// Middlewares
+import express, { Express } from "express";
 import errorMiddleware from "./middlewares/error.middleware.js";
 import IpsMiddleware from "./middlewares/ips.middleware.js";
 import logMiddleware from "./middlewares/log.middleware.js";
+import steamRouter from "./routers/SteamUserRouter.js";
 import DiscordService from "./services/DiscordService.js";
 
-// Express
-const app = express();
-app.disable("x-powered-by");
-app.use(express.urlencoded({ extended: false }));
-app.use(
-	cors({
-		origin: "https://thejaviertc.github.io",
-	})
-);
+class App {
+	private readonly app: Express;
 
-// Express Middlewares
-if (process.env.NODE_ENV === "production") {
-	await IpsMiddleware.initialize();
-	app.use(IpsMiddleware.processQuery);
-	app.use(logMiddleware);
+	public constructor() {
+		this.app = express();
+	}
+
+	/**
+	 * Entry point of the App
+	 */
+	public async start() {
+		this.setupConfig();
+		this.loadRouters();
+
+		// TODO: Remove await if possible
+		await this.loadMiddlewares();
+
+		this.app.listen(process.env.PORT ?? 3000, () => {
+			console.log("App running");
+		});
+
+		process.on("uncaughtException", (error: Error) => {
+			// TODO: Move check to Logger
+			if (process.env.NODE_ENV === "development") {
+				console.log(error.message);
+			} else {
+				DiscordService.logError(error);
+			}
+		});
+	}
+
+	/**
+	 * Setups the config of the app
+	 */
+	private setupConfig() {
+		this.app.use(express.urlencoded({ extended: false }));
+		this.app.disable("x-powered-by");
+
+		this.app.use(
+			cors({
+				origin: "https://thejaviertc.github.io",
+			})
+		);
+	}
+
+	/**
+	 * Loads all the Routers
+	 */
+	private loadRouters() {
+		// TODO: Change routes
+		this.app.use("/steam-workshop-stats", steamRouter);
+	}
+
+	/**
+	 * Loads all the Middlewares
+	 */
+	private async loadMiddlewares() {
+		// TODO: Move check to Logger
+		if (process.env.NODE_ENV === "production") {
+			await IpsMiddleware.initialize();
+			this.app.use(IpsMiddleware.processQuery);
+			this.app.use(logMiddleware);
+		}
+
+		this.app.use(errorMiddleware);
+	}
 }
 
-app.use("/steam-workshop-stats", steamRouter);
-app.use(errorMiddleware);
-
-app.listen(process.env.PORT ?? 3000, () => {
-	console.log("App running");
-});
-
-process.on("uncaughtException", (error: Error) => {
-	if (process.env.NODE_ENV === "development") {
-		console.log(error.message);
-	} else {
-		DiscordService.logError(error);
-	}
-});
+const app = new App();
+await app.start();
