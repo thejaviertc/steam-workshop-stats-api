@@ -80,7 +80,7 @@ class IpsMiddleware {
 			return res.status(503).send({ message: "You sent too many requests." });
 		}
 
-		next();
+		return next();
 	}
 }
 

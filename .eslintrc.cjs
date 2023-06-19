@@ -9,7 +9,7 @@ module.exports = {
 		ecmaVersion: "latest",
 		sourceType: "module",
 	},
-	plugins: ["@typescript-eslint"],
+	plugins: ["@typescript-eslint", "eslint-plugin-tsdoc"],
 	rules: {
 		indent: ["error", "tab", { SwitchCase: 1 }],
 		"linebreak-style": ["error", "unix"],
