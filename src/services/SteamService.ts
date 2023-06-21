@@ -9,14 +9,12 @@ import ISteamService from "./ISteamService.js";
 
 class SteamService implements ISteamService {
 	/**
-	 * Fetches the Steam API and returns the SteamID of the user
-	 * @param id
-	 * @returns string
+	 * Gets the SteamID of the Steam User from the ProfileID
 	 */
-	public async fetchSteamId(id: string): Promise<string> {
+	public async getSteamIdFromProfileId(profileId: string): Promise<string> {
 		try {
 			const response = await axios.get(
-				`https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=${process.env.STEAM_API}&vanityurl=${id}`
+				`https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=${process.env.STEAM_API}&vanityurl=${profileId}`
 			);
 
 			return response.data.response.steamid;
@@ -26,11 +24,9 @@ class SteamService implements ISteamService {
 	}
 
 	/**
-	 * Fetches the Steam API and returns the username and profile image of the user
-	 * @param steamId
-	 * @returns Object
+	 * Gets the username and profile image of the Steam User
 	 */
-	public async fetchBasicInfo(steamId: string) {
+	public async getSteamUserBasicInfo(steamId: string) {
 		try {
 			const response = await axios.get(
 				`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${process.env.STEAM_API}&steamids=${steamId}`
@@ -54,11 +50,9 @@ class SteamService implements ISteamService {
 	}
 
 	/**
-	 * Fetches the Steam API and returns a list of addons of the user
-	 * @param steamId
-	 * @returns Object
+	 * Gets all the addons of a Steam User
 	 */
-	public async fetchAddonsInfo(steamId: string) {
+	public async getAllSteamUserAddons(steamId: string) {
 		let response;
 
 		try {
@@ -113,6 +107,9 @@ class SteamService implements ISteamService {
 		return addonsInfo;
 	}
 
+	/**
+	 * Gets the number of starts of an Addon
+	 */
 	private obtainNumberOfStars(numberVotes: number, score: number): number {
 		if (numberVotes >= 25) {
 			return Math.ceil(score * 5);

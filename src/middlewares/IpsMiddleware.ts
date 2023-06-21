@@ -10,7 +10,7 @@ class IpsMiddleware {
 	public constructor() {
 		this.bannedIps = [];
 		this.actualIpList = [];
-		this.processQuery = this.processQuery.bind(this);
+		this.execute = this.execute.bind(this);
 	}
 
 	/**
@@ -26,16 +26,14 @@ class IpsMiddleware {
 
 	/**
 	 * Adds an IP to the actual ip list and initializes the counter
-	 * @param ip string
 	 */
 	private addIp(ip: string) {
 		this.actualIpList.push({ value: ip, count: 1 });
 	}
 
 	/**
-	 * Returns the position of the IP inside the array
-	 * @param value string
-	 * @returns number (-1 if not found)
+	 * Checks if the IP exists inside the list and returns it's position
+	 * @returns The position of the IP (-1 if not found)
 	 */
 	private hasIp(value: string): number {
 		return this.actualIpList.findIndex((ip) => ip.value === value);
@@ -43,8 +41,6 @@ class IpsMiddleware {
 
 	/**
 	 * Checks if the IP has reached the limit of 100 petitions in less than 5 minutes
-	 * @param ip string
-	 * @returns boolean
 	 */
 	public hasReachedLimit(ip: string): boolean {
 		const position = this.hasIp(ip);
@@ -60,28 +56,26 @@ class IpsMiddleware {
 	}
 
 	/**
-	 * Process each query, checking if the ip has reached the limit of request
-	 * @param req
-	 * @param res
-	 * @param next
-	 * @returns
+	 * Checks if the IP has reached the limit of request
 	 */
-	public async processQuery(req: Request, res: Response, next: NextFunction) {
+	public async execute(req: Request, res: Response, next: NextFunction) {
 		const ip = IpUtils.getIpFromRequest(req);
 
 		if (this.bannedIps.includes(ip)) {
-			await DiscordService.logBan(req);
-			return res.status(503).send({ message: "You sent too many requests." });
+			return res.status(403).send({ message: "You sent too many requests." });
 		}
 
 		if (this.hasReachedLimit(ip)) {
 			await DatabaseService.insertBannedIp(ip);
 			await DiscordService.logBan(req);
-			return res.status(503).send({ message: "You sent too many requests." });
+			return res.status(403).send({ message: "You sent too many requests." });
 		}
 
 		return next();
 	}
 }
 
-export default new IpsMiddleware();
+const ipsMiddleware = new IpsMiddleware();
+await ipsMiddleware.initialize();
+
+export default ipsMiddleware.execute;

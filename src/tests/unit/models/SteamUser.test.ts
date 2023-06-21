@@ -6,29 +6,23 @@ describe("SteamUser", () => {
 		expect(steamUser).toBeInstanceOf(SteamUser);
 	});
 
-	test("Detects as valid a real profile url with type 'id'", () => {
-		expect(SteamUser.isProfileUrlValid("https://steamcommunity.com/id/javiertc")).toBeTruthy();
+	test("Detects as valid a real Profile ID", () => {
+		expect(SteamUser.isProfileIdValid("javiertc")).toBeTruthy();
 	});
 
-	test("Detects as valid a real profile url with type 'id' and symbols", () => {
-		expect(
-			SteamUser.isProfileUrlValid("https://steamcommunity.com/id/Chuckleberry_Finn")
-		).toBeTruthy();
+	test("Detects as valid a real Profile ID with symbols", () => {
+		expect(SteamUser.isProfileIdValid("Chuckleberry_Finn")).toBeTruthy();
 	});
 
-	test("Detects as valid a real profile url with type 'profiles'", () => {
-		expect(
-			SteamUser.isProfileUrlValid("https://steamcommunity.com/profiles/76561198871941294")
-		).toBeTruthy();
+	test("Detects as invalid ProfileID a random value", () => {
+		expect(SteamUser.isProfileIdValid("^```")).toBeFalsy();
 	});
 
-	test("Detects as invalid a random string", () => {
-		expect(SteamUser.isProfileUrlValid("asdopfkaspokf")).toBeFalsy();
+	test("Detects as valid a real SteamID", () => {
+		expect(SteamUser.isSteamIdValid("76561198871941294")).toBeTruthy();
 	});
 
-	test("Detects as invalid a string that is similar to a real one", () => {
-		expect(
-			SteamUser.isProfileUrlValid("https://steamcommunity.com/something/asdoas")
-		).toBeFalsy();
+	test("Detects as invalid SteamID a random string", () => {
+		expect(SteamUser.isSteamIdValid("asdopfkaspokf")).toBeFalsy();
 	});
 });

@@ -9,62 +9,64 @@ class DiscordService implements IDiscordService {
 	 * @param req
 	 */
 	public async logRoute(req: Request) {
-		const route = req.url;
-		const ip = IpUtils.getIpFromRequest(req);
+		if (process.env.NODE_ENV === "production") {
+			const route = req.url;
+			const ip = IpUtils.getIpFromRequest(req);
 
-		await axios({
-			method: "POST",
-			url: process.env.DISCORD_WEBHOOK_LOGS,
-			headers: { "Content-Type": "application/json" },
-			data: JSON.stringify({
-				embeds: [
-					{
-						title: "Route Access",
-						color: 10070709,
-						type: "rich",
-						fields: [
-							{ name: "Route", value: route, inline: false },
-							{ name: "User IP", value: ip, inline: false },
-						],
-						timestamp: new Date(),
-					},
-				],
-			}),
-		});
+			await axios({
+				method: "POST",
+				url: process.env.DISCORD_WEBHOOK_LOGS,
+				headers: { "Content-Type": "application/json" },
+				data: JSON.stringify({
+					embeds: [
+						{
+							title: "Route Access",
+							color: 10070709,
+							type: "rich",
+							fields: [
+								{ name: "Route", value: route, inline: false },
+								{ name: "User IP", value: ip, inline: false },
+							],
+							timestamp: new Date(),
+						},
+					],
+				}),
+			});
+		}
 	}
 
 	/**
-	 * Logs the query of a user in Discord
-	 * @param req
-	 * @param invalidReason string
+	 * Logs GET Steam User
 	 */
 	public async logQuery(req: Request, invalidReason?: string) {
-		const value = req.query.url;
-		const ip = IpUtils.getIpFromRequest(req);
+		if (process.env.NODE_ENV === "production") {
+			const value = req.query.url;
+			const ip = IpUtils.getIpFromRequest(req);
 
-		const embed = {
-			title: invalidReason ? "Invalid Query" : "Valid Query",
-			color: invalidReason ? 15548997 : 5763719,
-			type: "rich",
-			fields: [
-				{ name: "Value", value: value, inline: false },
-				{ name: "User IP", value: ip, inline: false },
-			],
-			timestamp: new Date(),
-		};
+			const embed = {
+				title: invalidReason ? "Invalid Query" : "Valid Query",
+				color: invalidReason ? 15548997 : 5763719,
+				type: "rich",
+				fields: [
+					{ name: "Value", value: value, inline: false },
+					{ name: "User IP", value: ip, inline: false },
+				],
+				timestamp: new Date(),
+			};
 
-		if (invalidReason) {
-			embed.fields.push({ name: "Reason", value: invalidReason, inline: false });
+			if (invalidReason) {
+				embed.fields.push({ name: "Reason", value: invalidReason, inline: false });
+			}
+
+			await axios({
+				method: "POST",
+				url: process.env.DISCORD_WEBHOOK_LOGS,
+				headers: { "Content-Type": "application/json" },
+				data: JSON.stringify({
+					embeds: [embed],
+				}),
+			});
 		}
-
-		await axios({
-			method: "POST",
-			url: process.env.DISCORD_WEBHOOK_LOGS,
-			headers: { "Content-Type": "application/json" },
-			data: JSON.stringify({
-				embeds: [embed],
-			}),
-		});
 	}
 
 	/**

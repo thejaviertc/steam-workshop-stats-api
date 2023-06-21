@@ -1,6 +1,6 @@
 import Addon from "./Addon.js";
 
-class SteamUser {
+export default class SteamUser {
 	private readonly steamId: string;
 	private readonly username: string;
 	private readonly profileImage: string;
@@ -34,14 +34,18 @@ class SteamUser {
 	}
 
 	/**
-	 * Checks if the profile url is valid
-	 * @param url
-	 * @returns boolean
+	 * Checks if the user profile id is valid
 	 */
-	public static isProfileUrlValid(url: string): boolean {
-		const urlPattern = /https:\/\/steamcommunity.com\/(id|profiles)\/*/;
-		return urlPattern.test(url);
+	public static isProfileIdValid(profileId: string): boolean {
+		const pattern = /\w/;
+		return pattern.test(profileId);
+	}
+
+	/**
+	 * Checks if the SteamID is valid
+	 */
+	public static isSteamIdValid(steamId: string): boolean {
+		const pattern = /\d/;
+		return pattern.test(steamId);
 	}
 }
-
-export default SteamUser;

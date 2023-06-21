@@ -1,42 +1,55 @@
-import { Request, Response } from "express";
-import CustomError from "../errors/CustomError.js";
-import UrlNotValidError from "../errors/UrlNotValidError.js";
+import { NextFunction, Request, Response } from "express";
+import ProfileIdNotValidError from "../errors/ProfileIdNotValidError.js";
+import SteamIdNotValidError from "../errors/SteamIdNotValidError.js";
 import SteamUser from "../models/SteamUser.js";
 import DiscordService from "../services/DiscordService.js";
 import SteamService from "../services/SteamService.js";
 
 class SteamController {
 	/**
-	 * Returns the info of the Steam User
-	 * @param req
-	 * @param res
+	 * Gets a Steam User using the profile id
 	 */
-	public async getSteamUser(req: Request, res: Response) {
+	public async getSteamUserByProfileId(req: Request, res: Response, next: NextFunction) {
 		try {
-			const url: string = req.query.url as string;
+			const profileId = req.params.profileId;
 
-			if (!SteamUser.isProfileUrlValid(url)) {
-				throw new UrlNotValidError();
+			if (!SteamUser.isProfileIdValid(profileId)) {
+				throw new ProfileIdNotValidError();
 			}
 
-			// Get the type of url and it's value
-			const pattern =
-				/https:\/\/steamcommunity.com\/(?<type>(id|profiles))\/(?<value>\w+)\/?/;
-			const regex = pattern.exec(url);
+			const steamId = await SteamService.getSteamIdFromProfileId(profileId);
 
-			const urlType = regex?.groups?.type;
-			const urlValue = regex?.groups?.value ?? "";
+			this.getSteamUser(req, res, next, steamId);
+		} catch (error) {
+			next(error);
+		}
+	}
 
-			// Get the value from the URL (if it's profile) or fetch it if not
-			let steamId: string = urlValue;
+	/**
+	 * Gets a Steam User using the SteamID
+	 */
+	public async getSteamUserBySteamId(req: Request, res: Response, next: NextFunction) {
+		try {
+			const steamId = req.params.steamId;
 
-			if (urlType === "id") {
-				steamId = await SteamService.fetchSteamId(urlValue);
+			if (!SteamUser.isSteamIdValid(steamId)) {
+				throw new SteamIdNotValidError();
 			}
 
+			this.getSteamUser(req, res, next, steamId);
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	/**
+	 * Gets a Steam User
+	 */
+	private async getSteamUser(req: Request, res: Response, next: NextFunction, steamId: string) {
+		try {
 			const [basicInfo, addonsInfo] = await Promise.all([
-				SteamService.fetchBasicInfo(steamId),
-				SteamService.fetchAddonsInfo(steamId),
+				SteamService.getSteamUserBasicInfo(steamId),
+				SteamService.getAllSteamUserAddons(steamId),
 			]);
 
 			res.send(
@@ -53,19 +66,9 @@ class SteamController {
 				)
 			);
 
-			if (process.env.NODE_ENV === "production") {
-				DiscordService.logQuery(req);
-			}
+			DiscordService.logQuery(req);
 		} catch (error) {
-			if (error instanceof CustomError) {
-				if (process.env.NODE_ENV === "production") {
-					DiscordService.logQuery(req, error.message);
-				}
-
-				res.status(error.httpCode).send({ message: error.message });
-			}
-
-			throw error;
+			next(error);
 		}
 	}
 }
