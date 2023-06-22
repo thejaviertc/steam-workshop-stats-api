@@ -17,7 +17,6 @@ class App {
 		this.loadRouters();
 
 		this.app.listen(process.env.PORT ?? 3000, () => {
-			// TODO: Log in Discord
 			console.log("App running");
 		});
 	}
