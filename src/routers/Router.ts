@@ -1,7 +1,7 @@
-import express, { Router } from "express";
+import express, { Router as ExpressRouter } from "express";
 
-export default abstract class BasicRouter {
-	public router: Router;
+export default abstract class Router {
+	public router: ExpressRouter;
 
 	public constructor() {
 		this.router = express.Router();

@@ -1,7 +1,7 @@
 import SteamController from "../controllers/SteamController.js";
-import BasicRouter from "./BasicRouter.js";
+import Router from "./Router.js";
 
-class SteamUserRouter extends BasicRouter {
+class SteamUserRouter extends Router {
 	public constructor() {
 		super();
 	}
