@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import CustomError from "../errors/CustomError.js";
+import CustomError from "./CustomError.js";
 
-class ErrorMiddleware {
+class ErrorHandler {
 	/**
 	 * Sends the specific error message of a custom error
 	 */
@@ -14,4 +14,4 @@ class ErrorMiddleware {
 	}
 }
 
-export default new ErrorMiddleware().execute;
+export default new ErrorHandler().execute;

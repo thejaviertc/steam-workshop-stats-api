@@ -1,6 +1,6 @@
 import cors from "cors";
 import express, { Express } from "express";
-import ErrorMiddleware from "./middlewares/ErrorMiddleware.js";
+import ErrorHandler from "./errors/ErrorHandler.js";
 import IpsMiddleware from "./middlewares/IpsMiddleware.js";
 import LogAccessMiddleware from "./middlewares/LogAccessMiddleware.js";
 import SteamUserRouter from "./routers/SteamUserRouter.js";
@@ -15,6 +15,8 @@ class App {
 		this.setupConfig();
 		this.loadMiddlewares();
 		this.loadRouters();
+
+		this.app.use(ErrorHandler);
 
 		this.app.listen(process.env.PORT ?? 3000, () => {
 			console.log("App running");
@@ -36,19 +38,18 @@ class App {
 	}
 
 	/**
-	 * Loads all the Routers
-	 */
-	private loadRouters() {
-		this.app.use("/steam-user", SteamUserRouter);
-	}
-
-	/**
 	 * Loads all the Middlewares
 	 */
 	private loadMiddlewares() {
 		this.app.use(IpsMiddleware);
 		this.app.use(LogAccessMiddleware);
-		this.app.use(ErrorMiddleware);
+	}
+
+	/**
+	 * Loads all the Routers
+	 */
+	private loadRouters() {
+		this.app.use("/steam-user", SteamUserRouter);
 	}
 }
 
