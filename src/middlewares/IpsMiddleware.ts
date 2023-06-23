@@ -2,8 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import DatabaseService from "../services/DatabaseService.js";
 import DiscordService from "../services/DiscordService.js";
 import IpUtils from "../utils/IpUtils.js";
+import IMiddleware from "./IMiddleware.js";
 
-class IpsMiddleware {
+class IpsMiddleware implements IMiddleware {
 	private bannedIps: string[];
 	private actualIpList: { value: string; count: number }[];
 
@@ -62,16 +63,16 @@ class IpsMiddleware {
 		const ip = IpUtils.getIpFromRequest(req);
 
 		if (this.bannedIps.includes(ip)) {
-			return res.status(403).send({ message: "You sent too many requests." });
+			res.status(403).send({ message: "You sent too many requests." });
 		}
 
 		if (this.hasReachedLimit(ip)) {
 			await DatabaseService.insertBannedIp(ip);
 			await DiscordService.logBan(req);
-			return res.status(403).send({ message: "You sent too many requests." });
+			res.status(403).send({ message: "You sent too many requests." });
 		}
 
-		return next();
+		next();
 	}
 }
 
