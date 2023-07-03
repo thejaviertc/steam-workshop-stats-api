@@ -54,11 +54,3 @@ class App {
 }
 
 const _app = new App();
-
-process.on("uncaughtException", (error: Error) => {
-	if (process.env.NODE_ENV === "production") {
-		DiscordService.logError(error);
-	} else {
-		console.log(error.message);
-	}
-});
