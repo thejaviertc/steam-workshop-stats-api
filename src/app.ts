@@ -4,7 +4,6 @@ import ErrorHandler from "./errors/ErrorHandler.js";
 import IpsMiddleware from "./middlewares/IpsMiddleware.js";
 import LogAccessMiddleware from "./middlewares/LogAccessMiddleware.js";
 import SteamUserRouter from "./routers/SteamUserRouter.js";
-import DiscordService from "./services/DiscordService.js";
 
 class App {
 	private readonly app: Express;
