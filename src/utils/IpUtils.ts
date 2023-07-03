@@ -3,8 +3,6 @@ import { Request } from "express";
 export default class IpUtils {
 	/**
 	 * Returns the IP of the user that made the request
-	 * @param req
-	 * @returns string
 	 */
 	public static getIpFromRequest(req: Request): string {
 		let ips =

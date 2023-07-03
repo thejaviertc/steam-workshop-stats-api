@@ -1,12 +1,11 @@
 import axios from "axios";
+import { Request } from "express";
 import IpUtils from "../utils/IpUtils.js";
 import IDiscordService from "./IDiscordService.js";
-import { Request } from "express";
 
 class DiscordService implements IDiscordService {
 	/**
-	 * Logs the access to any route of the API in Discord
-	 * @param req
+	 * Logs the access to any route of the API
 	 */
 	public async logRoute(req: Request) {
 		if (process.env.NODE_ENV === "production") {
@@ -36,7 +35,7 @@ class DiscordService implements IDiscordService {
 	}
 
 	/**
-	 * Logs GET Steam User
+	 * Logs a query
 	 */
 	public async logQuery(req: Request, invalidReason?: string) {
 		if (process.env.NODE_ENV === "production") {
@@ -70,12 +69,9 @@ class DiscordService implements IDiscordService {
 	}
 
 	/**
-	 * Logs the banned ip in Discord
-	 * @param ip string
+	 * Logs a ban
 	 */
-	public async logBan(req: Request) {
-		const ip = IpUtils.getIpFromRequest(req);
-
+	public async logBan(ip: string) {
 		await axios({
 			method: "POST",
 			url: process.env.DISCORD_WEBHOOK_BANS,
@@ -94,7 +90,10 @@ class DiscordService implements IDiscordService {
 		});
 	}
 
-	public async logError(error: Error) {
+	/**
+	 * Logs an unhandled error
+	 */
+	public async logUnhandledError(error: Error) {
 		await axios({
 			method: "POST",
 			url: process.env.DISCORD_WEBHOOK_ERRORS,
@@ -104,7 +103,7 @@ class DiscordService implements IDiscordService {
 					{
 						color: 15548997,
 						type: "rich",
-						fields: [{ name: "Error", value: error.message }],
+						fields: [{ name: "Unhandled Error", value: error.message }],
 						timestamp: new Date(),
 					},
 				],

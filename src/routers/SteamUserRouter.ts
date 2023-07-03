@@ -6,6 +6,9 @@ class SteamUserRouter extends Router {
 		super();
 	}
 
+	/**
+	 * Loads the routes
+	 */
 	public override loadRoutes() {
 		this.router.get(
 			"/id/:profileId",

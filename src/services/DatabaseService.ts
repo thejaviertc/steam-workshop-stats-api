@@ -20,8 +20,7 @@ class DatabaseService implements IDatabaseService {
 	}
 
 	/**
-	 * Obtains the banned ips from the database
-	 * @returns string[]
+	 * Gets the banned ips from the database
 	 */
 	public async getBannedIps(): Promise<string[]> {
 		const result = await this.database.query("SELECT ip FROM banned_ip");
@@ -35,8 +34,7 @@ class DatabaseService implements IDatabaseService {
 	}
 
 	/**
-	 * Inserts the banned IP in the database
-	 * @param ip string
+	 * Inserts a banned IP in the database
 	 */
 	public async insertBannedIp(ip: string) {
 		await this.database.query("INSERT INTO banned_ip (ip) VALUES ($1)", [ip]);
