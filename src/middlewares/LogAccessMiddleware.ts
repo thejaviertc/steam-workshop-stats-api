@@ -7,7 +7,7 @@ class LogAccessMiddleware implements IMiddleware {
 	 * Logs every access to the API
 	 */
 	public async execute(req: Request, _res: Response, next: NextFunction) {
-		await DiscordService.logRoute(req);
+		DiscordService.logRoute(req);
 		return next();
 	}
 }

@@ -7,12 +7,12 @@ class DiscordService implements IDiscordService {
 	/**
 	 * Logs the access to any route of the API
 	 */
-	public async logRoute(req: Request) {
+	public logRoute(req: Request) {
 		if (process.env.NODE_ENV === "production") {
 			const route = req.url;
 			const ip = IpUtils.getIpFromRequest(req);
 
-			await axios({
+			axios({
 				method: "POST",
 				url: process.env.DISCORD_WEBHOOK_LOGS,
 				headers: { "Content-Type": "application/json" },
@@ -37,9 +37,9 @@ class DiscordService implements IDiscordService {
 	/**
 	 * Logs a query
 	 */
-	public async logQuery(req: Request, invalidReason?: string) {
+	public logQuery(req: Request, invalidReason?: string) {
 		if (process.env.NODE_ENV === "production") {
-			const value = req.query.url;
+			const route = req.url;
 			const ip = IpUtils.getIpFromRequest(req);
 
 			const embed = {
@@ -47,7 +47,7 @@ class DiscordService implements IDiscordService {
 				color: invalidReason ? 15548997 : 5763719,
 				type: "rich",
 				fields: [
-					{ name: "Value", value: value, inline: false },
+					{ name: "Value", value: route, inline: false },
 					{ name: "User IP", value: ip, inline: false },
 				],
 				timestamp: new Date(),
@@ -57,7 +57,7 @@ class DiscordService implements IDiscordService {
 				embed.fields.push({ name: "Reason", value: invalidReason, inline: false });
 			}
 
-			await axios({
+			axios({
 				method: "POST",
 				url: process.env.DISCORD_WEBHOOK_LOGS,
 				headers: { "Content-Type": "application/json" },
@@ -71,8 +71,8 @@ class DiscordService implements IDiscordService {
 	/**
 	 * Logs a ban
 	 */
-	public async logBan(ip: string) {
-		await axios({
+	public logBan(ip: string) {
+		axios({
 			method: "POST",
 			url: process.env.DISCORD_WEBHOOK_BANS,
 			headers: { "Content-Type": "application/json" },
@@ -93,8 +93,8 @@ class DiscordService implements IDiscordService {
 	/**
 	 * Logs an unhandled error
 	 */
-	public async logUnhandledError(error: Error) {
-		await axios({
+	public logUnhandledError(error: Error) {
+		axios({
 			method: "POST",
 			url: process.env.DISCORD_WEBHOOK_ERRORS,
 			headers: { "Content-Type": "application/json" },

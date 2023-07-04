@@ -68,7 +68,7 @@ class IpsMiddleware implements IMiddleware {
 
 		if (this.hasReachedLimit(ip)) {
 			await DatabaseService.insertBannedIp(ip);
-			await DiscordService.logBan(ip);
+			DiscordService.logBan(ip);
 			res.status(403).send({ message: "You sent too many requests." });
 		}
 
