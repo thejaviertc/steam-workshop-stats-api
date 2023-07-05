@@ -31,7 +31,8 @@ class App {
 
 		this.app.use(
 			cors({
-				origin: "https://thejaviertc.github.io",
+				origin:
+					process.env.NODE_ENV === "production" ? "https://thejaviertc.github.io" : "*",
 			})
 		);
 	}
