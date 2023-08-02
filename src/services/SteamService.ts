@@ -14,7 +14,7 @@ class SteamService implements ISteamService {
 	public async getSteamIdFromProfileId(profileId: string): Promise<string> {
 		try {
 			const response = await axios.get(
-				`https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=${process.env.STEAM_API}&vanityurl=${profileId}`
+				`https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=${process.env.STEAM_API}&vanityurl=${profileId}`,
 			);
 
 			return response.data.response.steamid;
@@ -29,7 +29,7 @@ class SteamService implements ISteamService {
 	public async getSteamUserBasicInfo(steamId: string) {
 		try {
 			const response = await axios.get(
-				`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${process.env.STEAM_API}&steamids=${steamId}`
+				`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${process.env.STEAM_API}&steamids=${steamId}`,
 			);
 
 			if (response.data.response.players.length === 0) {
@@ -57,7 +57,7 @@ class SteamService implements ISteamService {
 
 		try {
 			response = await axios.get(
-				`https://api.steampowered.com/IPublishedFileService/GetUserFiles/v1/?key=${process.env.STEAM_API}&steamid=${steamId}&numperpage=500&return_vote_data=true`
+				`https://api.steampowered.com/IPublishedFileService/GetUserFiles/v1/?key=${process.env.STEAM_API}&steamid=${steamId}&numperpage=500&return_vote_data=true`,
 			);
 		} catch (error) {
 			throw new AddonsNotFoundError();
@@ -77,8 +77,8 @@ class SteamService implements ISteamService {
 				addonsInfo.views += addon.views;
 				addonsInfo.subscribers += addon.subscriptions;
 				addonsInfo.favorites += addon.favorited;
-				addonsInfo.likes += addon.vote_data.votes_up;
-				addonsInfo.dislikes += addon.vote_data.votes_down;
+				addonsInfo.likes += addon.vote_data.votes_up ?? 0;
+				addonsInfo.dislikes += addon.vote_data.votes_down ?? 0;
 
 				addonsInfo.addons.push(
 					new Addon(
@@ -88,13 +88,13 @@ class SteamService implements ISteamService {
 						addon.views,
 						addon.subscriptions,
 						addon.favorited,
-						addon.vote_data.votes_up,
-						addon.vote_data.votes_down,
+						addon.vote_data.votes_up ?? 0,
+						addon.vote_data.votes_down ?? 0,
 						this.obtainNumberOfStars(
 							addon.vote_data.votes_up + addon.vote_data.votes_down,
-							addon.vote_data.score
-						)
-					)
+							addon.vote_data.score,
+						),
+					),
 				);
 			});
 
