@@ -1,4 +1,19 @@
+/* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+import passport from "passport";
 import Router from "./Router.js";
+
+declare global {
+	namespace Express {
+		interface User {
+			id: string;
+			displayName: string;
+		}
+	}
+}
 
 class AuthRouter extends Router {
 	public constructor() {
@@ -10,14 +25,31 @@ class AuthRouter extends Router {
 	 */
 	public override loadRoutes() {
 		this.router.get(
-			"/id/:profileId",
-			SteamController.getSteamUserByProfileId.bind(SteamController)
+			"/",
+			passport.authenticate("steam", { failureRedirect: "/" }),
+			(_req, res) => {
+				res.redirect("/");
+			},
 		);
 
 		this.router.get(
-			"/profiles/:steamId",
-			SteamController.getSteamUserBySteamId.bind(SteamController)
+			"/return",
+			passport.authenticate("steam", { failureRedirect: "/" }),
+			(_req, res) => {
+				res.redirect("/");
+			},
 		);
+
+		this.router.get("/me", function (req, res) {
+			if (req.user) {
+				res.send({
+					id: req.user.id,
+					username: req.user.displayName,
+				});
+			} else {
+				res.sendStatus(403);
+			}
+		});
 	}
 }
 

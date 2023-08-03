@@ -1,5 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import cors from "cors";
 import express, { Express } from "express";
+import session from "express-session";
 import passport from "passport";
 import SteamStrategy from "passport-steam";
 import ErrorHandler from "./errors/ErrorHandler.js";
@@ -37,7 +44,15 @@ class App {
 			cors({
 				origin:
 					process.env.NODE_ENV === "production" ? "https://thejaviertc.github.io" : "*",
-			})
+			}),
+		);
+
+		this.app.use(
+			session({
+				secret: process.env.SECRET_SESSION!,
+				resave: true,
+				saveUninitialized: true,
+			}),
 		);
 	}
 
@@ -49,26 +64,33 @@ class App {
 			done(null, user);
 		});
 
-		passport.deserializeUser((obj, done) => {
+		passport.deserializeUser((obj: null, done) => {
 			done(null, obj);
 		});
+
+		const url =
+			process.env.NODE_ENV === "production"
+				? "https://steam-workshop-stats-api.onrender.com"
+				: "http://localhost:3000";
 
 		passport.use(
 			new SteamStrategy.Strategy(
 				{
-					returnURL: "http://localhost:3000/auth/callback",
-					realm: "http://localhost:3000/",
+					returnURL: `${url}/auth/return`,
+					realm: url,
 					apiKey: process.env.STEAM_API,
 				},
-				async (identifier: any, profile: any, done: any) => {
-					profile.identifier = identifier;
-
-					return done(null, user);
-				}
-			)
+				(identifier: any, profile: any, done: any) => {
+					process.nextTick(() => {
+						profile.identifier = identifier;
+						return done(null, profile);
+					});
+				},
+			),
 		);
 
 		this.app.use(passport.initialize());
+		this.app.use(passport.session());
 	}
 
 	/**
@@ -83,7 +105,7 @@ class App {
 	 * Loads all the Routers
 	 */
 	private loadRouters() {
-		this.app.use("/login", AuthRouter);
+		this.app.use("/auth", AuthRouter);
 		this.app.use("/steam-user", SteamUserRouter);
 	}
 }
