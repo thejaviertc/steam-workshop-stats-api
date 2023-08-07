@@ -1,4 +1,4 @@
-import SteamIdNotValidError from "../../../errors/SteamIdNotValidError.js";
+import SteamIdNotValidError from "./SteamIdNotValidError.js";
 
 describe("UrlNotValidError", () => {
 	test("Creates a new object", () => {

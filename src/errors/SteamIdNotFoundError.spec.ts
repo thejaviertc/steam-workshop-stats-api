@@ -1,4 +1,4 @@
-import SteamIdNotFoundError from "../../../errors/SteamIdNotFoundError.js";
+import SteamIdNotFoundError from "./SteamIdNotFoundError.js";
 
 describe("SteamIdNotFoundError", () => {
 	test("Creates a new object", () => {

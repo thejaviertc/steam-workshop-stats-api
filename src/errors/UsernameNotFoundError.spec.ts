@@ -1,4 +1,4 @@
-import UsernameNotFoundError from "../../../errors/UsernameNotFoundError.js";
+import UsernameNotFoundError from "./UsernameNotFoundError.js";
 
 describe("UsernameNotFoundError", () => {
 	test("Creates a new object", () => {

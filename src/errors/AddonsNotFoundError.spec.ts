@@ -1,4 +1,4 @@
-import AddonsNotFoundError from "../../../errors/AddonsNotFoundError.js";
+import AddonsNotFoundError from "./AddonsNotFoundError.js";
 
 describe("AddonsNotFoundError", () => {
 	test("Creates a new object", () => {

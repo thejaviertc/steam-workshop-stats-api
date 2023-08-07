@@ -1,4 +1,4 @@
-import ProfileIdNotValidError from "../../../errors/ProfileIdNotValidError.js";
+import ProfileIdNotValidError from "./ProfileIdNotValidError.js";
 
 describe("UrlNotValidError", () => {
 	test("Creates a new object", () => {

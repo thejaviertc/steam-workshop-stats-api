@@ -1,4 +1,4 @@
-import SteamUser from "../../../models/SteamUser.js";
+import SteamUser from "./SteamUser.js";
 
 describe("SteamUser", () => {
 	test("Creates a new object", () => {

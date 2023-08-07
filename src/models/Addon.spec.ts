@@ -1,4 +1,4 @@
-import Addon from "../../../models/Addon.js";
+import Addon from "./Addon.js";
 
 describe("Addon", () => {
 	const addon = new Addon(1, "", "", 1, 2, 3, 4, 5, 1);

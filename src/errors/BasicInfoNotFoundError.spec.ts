@@ -1,4 +1,4 @@
-import BasicInfoNotFoundError from "../../../errors/BasicInfoNotFoundError.js";
+import BasicInfoNotFoundError from "./BasicInfoNotFoundError.js";
 
 describe("BasicInfoNotFoundError", () => {
 	test("Creates a new object", () => {
