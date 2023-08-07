@@ -1,7 +1,8 @@
+import { describe, expect, it } from "vitest";
 import BasicInfoNotFoundError from "./BasicInfoNotFoundError.js";
 
 describe("BasicInfoNotFoundError", () => {
-	test("Creates a new object", () => {
+	it("Creates a new object", () => {
 		const basicInfoNotFoundError = new BasicInfoNotFoundError();
 		expect(basicInfoNotFoundError).toBeInstanceOf(BasicInfoNotFoundError);
 		expect(basicInfoNotFoundError.message).toContain("failed");

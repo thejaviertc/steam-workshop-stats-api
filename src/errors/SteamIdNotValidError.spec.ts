@@ -1,7 +1,8 @@
 import SteamIdNotValidError from "./SteamIdNotValidError.js";
+import { describe, expect, it } from "vitest";
 
 describe("UrlNotValidError", () => {
-	test("Creates a new object", () => {
+	it("Creates a new object", () => {
 		const steamIdNotValidError = new SteamIdNotValidError();
 		expect(steamIdNotValidError).toBeInstanceOf(SteamIdNotValidError);
 		expect(steamIdNotValidError.message).toContain("not valid");
