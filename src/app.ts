@@ -110,4 +110,5 @@ class App {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _app = new App();
