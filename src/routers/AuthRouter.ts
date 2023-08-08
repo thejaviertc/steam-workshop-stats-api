@@ -5,6 +5,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import passport from "passport";
 import Router from "./Router.js";
+import AuthMiddleware from "../middlewares/AuthMiddleware.js";
 
 declare global {
 	namespace Express {
@@ -40,7 +41,7 @@ class AuthRouter extends Router {
 			},
 		);
 
-		this.router.get("/me", function (req, res) {
+		this.router.get("/me", AuthMiddleware, (req, res) => {
 			if (req.user) {
 				res.send({
 					id: req.user.id,

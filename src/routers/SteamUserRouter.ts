@@ -1,4 +1,5 @@
 import SteamController from "../controllers/SteamController.js";
+import AuthMiddleware from "../middlewares/AuthMiddleware.js";
 import Router from "./Router.js";
 
 class SteamUserRouter extends Router {
@@ -12,12 +13,14 @@ class SteamUserRouter extends Router {
 	public override loadRoutes() {
 		this.router.get(
 			"/id/:profileId",
-			SteamController.getSteamUserByProfileId.bind(SteamController)
+			AuthMiddleware,
+			SteamController.getSteamUserByProfileId.bind(SteamController),
 		);
 
 		this.router.get(
 			"/profiles/:steamId",
-			SteamController.getSteamUserBySteamId.bind(SteamController)
+			AuthMiddleware,
+			SteamController.getSteamUserBySteamId.bind(SteamController),
 		);
 	}
 }
