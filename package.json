@@ -11,7 +11,7 @@
 		"express-session": "^1.17.3",
 		"passport": "^0.6.0",
 		"passport-steam": "^1.0.18",
-		"pg": "^8.11.2"
+		"pg": "^8.11.3"
 	},
 	"devDependencies": {
 		"@types/cors": "^2.8.13",
