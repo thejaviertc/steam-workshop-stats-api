@@ -19,7 +19,7 @@
 		"@types/express-session": "^1.17.7",
 		"@types/node": "^20.4.8",
 		"@types/passport": "^1.0.12",
-		"@types/passport-steam": "^1.0.1",
+		"@types/passport-steam": "^1.0.3",
 		"@types/pg": "^8.10.2",
 		"@typescript-eslint/eslint-plugin": "^6.3.0",
 		"@typescript-eslint/parser": "^6.3.0",
