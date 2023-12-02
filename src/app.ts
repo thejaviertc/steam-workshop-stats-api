@@ -22,9 +22,15 @@ class App {
 
 	public constructor() {
 		this.app = express();
+	}
 
+	/**
+	 * Initializes the app
+	 */
+	public start() {
 		this.setupExpressConfig();
 		this.setupPassportConfig();
+
 		this.loadMiddlewares();
 		this.loadRouters();
 
@@ -112,5 +118,5 @@ class App {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const _app = new App();
+const app = new App();
+app.start();
