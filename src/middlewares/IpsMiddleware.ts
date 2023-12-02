@@ -11,7 +11,6 @@ class IpsMiddleware implements IMiddleware {
 	public constructor() {
 		this.bannedIps = [];
 		this.actualIpList = [];
-		this.execute = this.execute.bind(this);
 	}
 
 	/**
@@ -20,9 +19,12 @@ class IpsMiddleware implements IMiddleware {
 	public async initialize() {
 		this.bannedIps = await DatabaseService.getBannedIps();
 
-		setInterval(() => {
-			this.actualIpList = [];
-		}, 1000 * 60 * 5);
+		setInterval(
+			() => {
+				this.actualIpList = [];
+			},
+			1000 * 60 * 5,
+		);
 	}
 
 	/**
@@ -79,4 +81,4 @@ class IpsMiddleware implements IMiddleware {
 const ipsMiddleware = new IpsMiddleware();
 await ipsMiddleware.initialize();
 
-export default ipsMiddleware.execute;
+export default ipsMiddleware;

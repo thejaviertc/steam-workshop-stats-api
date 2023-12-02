@@ -100,11 +100,12 @@ class App {
 	 * Loads all the Middlewares
 	 */
 	private loadMiddlewares() {
-		// TODO
-		const middlewares: IMiddleware[] = [
-			// IpsMiddleware,
-			LogAccessMiddleware,
-		];
+		const middlewares: IMiddleware[] = [];
+
+		if (process.env.NODE_ENV === "production") {
+			middlewares.push(LogAccessMiddleware);
+			middlewares.push(IpsMiddleware);
+		}
 
 		for (const middleware of middlewares) {
 			this.app.use(middleware.execute.bind(middleware));
