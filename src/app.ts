@@ -1,9 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import cors from "cors";
 import express, { Express } from "express";
 import session from "express-session";
@@ -88,7 +82,7 @@ class App {
 					realm: url,
 					apiKey: process.env.STEAM_API,
 				},
-				(identifier: any, profile: any, done: any) => {
+				(identifier, profile, done) => {
 					process.nextTick(() => {
 						profile.identifier = identifier;
 						return done(null, profile);
