@@ -3,14 +3,15 @@ import express, { Express } from "express";
 import session from "express-session";
 import passport from "passport";
 import SteamStrategy from "passport-steam";
-import ErrorHandler from "./errors/ErrorHandler.js";
 
+import ErrorHandlerMiddleware from "./middlewares/ErrorHandlerMiddleware.js";
+import IMiddleware from "./middlewares/IMiddleware.js";
 import IpsMiddleware from "./middlewares/IpsMiddleware.js";
 import LogAccessMiddleware from "./middlewares/LogAccessMiddleware.js";
-import IMiddleware from "./middlewares/IMiddleware.js";
 
 import AuthRouter from "./routers/AuthRouter.js";
 import SteamUserRouter from "./routers/SteamUserRouter.js";
+import DiscordService from "./services/DiscordService.js";
 
 class App {
 	private readonly app: Express;
@@ -29,8 +30,7 @@ class App {
 		this.loadMiddlewares();
 		this.loadRouters();
 
-		// TODO
-		this.app.use(ErrorHandler);
+		this.app.use(ErrorHandlerMiddleware);
 
 		this.app.listen(process.env.PORT ?? 3000, () => {
 			console.log("App running");
@@ -123,3 +123,11 @@ class App {
 
 const app = new App();
 app.start();
+
+process.on("uncaughtException", (error) => {
+	if (process.env.NODE_ENV === "production") {
+		DiscordService.logUnhandledError(error);
+	} else {
+		console.log(error.message);
+	}
+});

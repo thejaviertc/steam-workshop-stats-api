@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import DiscordService from "../services/DiscordService.js";
-import CustomError from "./CustomError.js";
+import CustomError from "../errors/CustomError.js";
 
-class ErrorHandler {
+class ErrorHandlerMiddleware {
 	/**
 	 * Sends the specific error message of a custom error
 	 */
@@ -13,12 +13,12 @@ class ErrorHandler {
 			if (process.env.NODE_ENV === "production") {
 				DiscordService.logUnhandledError(error);
 			} else {
-				console.log(error.message);
+				console.log(`Custom Error: ${error.message}`);
 			}
 
-			res.sendStatus(404);
+			res.sendStatus(500);
 		}
 	}
 }
 
-export default new ErrorHandler().execute;
+export default new ErrorHandlerMiddleware().execute;
