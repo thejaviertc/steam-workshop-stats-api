@@ -61,7 +61,7 @@ class IpsMiddleware implements IMiddleware {
 	/**
 	 * Checks if the IP has reached the limit of request
 	 */
-	public async execute(req: Request, res: Response, next: NextFunction) {
+	public execute(req: Request, res: Response, next: NextFunction) {
 		const ip = IpUtils.getIpFromRequest(req);
 
 		if (this.bannedIps.includes(ip)) {
@@ -69,7 +69,7 @@ class IpsMiddleware implements IMiddleware {
 		}
 
 		if (this.hasReachedLimit(ip)) {
-			await DatabaseService.insertBannedIp(ip);
+			DatabaseService.insertBannedIp(ip);
 			DiscordService.logBan(ip);
 			res.status(403).send({ message: "You sent too many requests." });
 		}

@@ -36,8 +36,8 @@ class DatabaseService implements IDatabaseService {
 	/**
 	 * Inserts a banned IP in the database
 	 */
-	public async insertBannedIp(ip: string) {
-		await this.database.query("INSERT INTO banned_ip (ip) VALUES ($1)", [ip]);
+	public insertBannedIp(ip: string) {
+		this.database.query("INSERT INTO banned_ip (ip) VALUES ($1)", [ip]);
 	}
 }
 
