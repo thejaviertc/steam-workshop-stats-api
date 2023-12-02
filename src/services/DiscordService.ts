@@ -36,34 +36,32 @@ class DiscordService implements IDiscordService {
 	 * Logs a query
 	 */
 	public logQuery(req: Request, invalidReason?: string) {
-		if (process.env.NODE_ENV === "production") {
-			const route = req.url;
-			const ip = IpUtils.getIpFromRequest(req);
+		const route = req.url;
+		const ip = IpUtils.getIpFromRequest(req);
 
-			const embed = {
-				title: invalidReason ? "Invalid Query" : "Valid Query",
-				color: invalidReason ? 15548997 : 5763719,
-				type: "rich",
-				fields: [
-					{ name: "Value", value: route, inline: false },
-					{ name: "User IP", value: ip, inline: false },
-				],
-				timestamp: new Date(),
-			};
+		const embed = {
+			title: invalidReason ? "Invalid Query" : "Valid Query",
+			color: invalidReason ? 15548997 : 5763719,
+			type: "rich",
+			fields: [
+				{ name: "Value", value: route, inline: false },
+				{ name: "User IP", value: ip, inline: false },
+			],
+			timestamp: new Date(),
+		};
 
-			if (invalidReason) {
-				embed.fields.push({ name: "Reason", value: invalidReason, inline: false });
-			}
-
-			axios({
-				method: "POST",
-				url: process.env.DISCORD_WEBHOOK_LOGS,
-				headers: { "Content-Type": "application/json" },
-				data: JSON.stringify({
-					embeds: [embed],
-				}),
-			});
+		if (invalidReason) {
+			embed.fields.push({ name: "Reason", value: invalidReason, inline: false });
 		}
+
+		axios({
+			method: "POST",
+			url: process.env.DISCORD_WEBHOOK_LOGS,
+			headers: { "Content-Type": "application/json" },
+			data: JSON.stringify({
+				embeds: [embed],
+			}),
+		});
 	}
 
 	/**

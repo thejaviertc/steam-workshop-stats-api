@@ -66,7 +66,9 @@ class SteamController {
 				)
 			);
 
-			DiscordService.logQuery(req);
+			if (process.env.NODE_ENV === "production") {
+				DiscordService.logQuery(req);
+			}
 		} catch (error) {
 			next(error);
 		}
