@@ -10,8 +10,10 @@ import session from "express-session";
 import passport from "passport";
 import SteamStrategy from "passport-steam";
 import ErrorHandler from "./errors/ErrorHandler.js";
+
 import IpsMiddleware from "./middlewares/IpsMiddleware.js";
 import LogAccessMiddleware from "./middlewares/LogAccessMiddleware.js";
+
 import AuthRouter from "./routers/AuthRouter.js";
 import SteamUserRouter from "./routers/SteamUserRouter.js";
 
@@ -21,8 +23,8 @@ class App {
 	public constructor() {
 		this.app = express();
 
-		this.setupConfig();
-		this.setupAuth();
+		this.setupExpressConfig();
+		this.setupPassportConfig();
 		this.loadMiddlewares();
 		this.loadRouters();
 
@@ -34,9 +36,9 @@ class App {
 	}
 
 	/**
-	 * Setups the config of the app
+	 * Setups Express related configs
 	 */
-	private setupConfig() {
+	private setupExpressConfig() {
 		this.app.use(express.urlencoded({ extended: false }));
 		this.app.disable("x-powered-by");
 
@@ -57,9 +59,9 @@ class App {
 	}
 
 	/**
-	 * Setups the auth system of the app
+	 * Setups Passport related configs
 	 */
-	private setupAuth() {
+	private setupPassportConfig() {
 		passport.serializeUser((user, done) => {
 			done(null, user);
 		});
