@@ -8,30 +8,28 @@ class DiscordService implements IDiscordService {
 	 * Logs the access to any route of the API
 	 */
 	public logRoute(req: Request) {
-		if (process.env.NODE_ENV === "production") {
-			const route = req.url;
-			const ip = IpUtils.getIpFromRequest(req);
+		const route = req.url;
+		const ip = IpUtils.getIpFromRequest(req);
 
-			axios({
-				method: "POST",
-				url: process.env.DISCORD_WEBHOOK_LOGS,
-				headers: { "Content-Type": "application/json" },
-				data: JSON.stringify({
-					embeds: [
-						{
-							title: "Route Access",
-							color: 10070709,
-							type: "rich",
-							fields: [
-								{ name: "Route", value: route, inline: false },
-								{ name: "User IP", value: ip, inline: false },
-							],
-							timestamp: new Date(),
-						},
-					],
-				}),
-			});
-		}
+		axios({
+			method: "POST",
+			url: process.env.DISCORD_WEBHOOK_LOGS,
+			headers: { "Content-Type": "application/json" },
+			data: JSON.stringify({
+				embeds: [
+					{
+						title: "Route Access",
+						color: 10070709,
+						type: "rich",
+						fields: [
+							{ name: "Route", value: route, inline: false },
+							{ name: "User IP", value: ip, inline: false },
+						],
+						timestamp: new Date(),
+					},
+				],
+			}),
+		});
 	}
 
 	/**
