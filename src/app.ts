@@ -28,6 +28,7 @@ class App {
 		this.loadMiddlewares();
 		this.loadRouters();
 
+		// TODO
 		this.app.use(ErrorHandler);
 
 		this.app.listen(process.env.PORT ?? 3000, () => {
@@ -44,8 +45,7 @@ class App {
 
 		this.app.use(
 			cors({
-				origin:
-					process.env.NODE_ENV === "production" ? "https://thejaviertc.github.io" : "*",
+				origin: process.env.NODE_ENV === "production" ? process.env.FRONTEND_DOMAIN : "*",
 			}),
 		);
 
@@ -72,7 +72,7 @@ class App {
 
 		const url =
 			process.env.NODE_ENV === "production"
-				? "https://steam-workshop-stats-api.onrender.com"
+				? process.env.BACKEND_DOMAIN
 				: "http://localhost:3000";
 
 		passport.use(
