@@ -7,6 +7,7 @@ import ErrorHandler from "./errors/ErrorHandler.js";
 
 import IpsMiddleware from "./middlewares/IpsMiddleware.js";
 import LogAccessMiddleware from "./middlewares/LogAccessMiddleware.js";
+import IMiddleware from "./middlewares/IMiddleware.js";
 
 import AuthRouter from "./routers/AuthRouter.js";
 import SteamUserRouter from "./routers/SteamUserRouter.js";
@@ -99,8 +100,15 @@ class App {
 	 * Loads all the Middlewares
 	 */
 	private loadMiddlewares() {
-		this.app.use(IpsMiddleware);
-		this.app.use(LogAccessMiddleware);
+		// TODO
+		const middlewares: IMiddleware[] = [
+			// IpsMiddleware,
+			LogAccessMiddleware,
+		];
+
+		for (const middleware of middlewares) {
+			this.app.use(middleware.execute.bind(middleware));
+		}
 	}
 
 	/**
