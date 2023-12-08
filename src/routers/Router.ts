@@ -5,12 +5,5 @@ export default abstract class Router {
 
 	public constructor() {
 		this.router = express.Router();
-
-		this.loadRoutes();
 	}
-
-	/**
-	 * Loads all the routes
-	 */
-	abstract loadRoutes(): void;
 }

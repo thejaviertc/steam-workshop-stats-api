@@ -19,12 +19,7 @@ declare global {
 class AuthRouter extends Router {
 	public constructor() {
 		super();
-	}
 
-	/**
-	 * Loads the routes
-	 */
-	public override loadRoutes() {
 		this.router.get(
 			"/",
 			passport.authenticate("steam", { failureRedirect: "/" }),

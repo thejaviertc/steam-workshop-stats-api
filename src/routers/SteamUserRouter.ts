@@ -5,12 +5,7 @@ import Router from "./Router.js";
 class SteamUserRouter extends Router {
 	public constructor() {
 		super();
-	}
 
-	/**
-	 * Loads the routes
-	 */
-	public override loadRoutes() {
 		this.router.get(
 			"/id/:profileId",
 			AuthMiddleware,
