@@ -1,19 +1,10 @@
-/* eslint-disable @typescript-eslint/no-namespace */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import passport from "passport";
 import Router from "./Router.js";
 import AuthMiddleware from "../middlewares/AuthMiddleware.js";
 
-declare global {
-	namespace Express {
-		interface User {
-			id: string;
-			displayName: string;
-		}
-	}
+interface SteamUser {
+	id: string;
+	displayName: string;
 }
 
 class AuthRouter extends Router {
@@ -37,10 +28,12 @@ class AuthRouter extends Router {
 		);
 
 		this.router.get("/me", AuthMiddleware, (req, res) => {
-			if (req.user) {
+			const user = req.user as SteamUser;
+
+			if (user) {
 				res.send({
-					id: req.user.id,
-					username: req.user.displayName,
+					id: user.id,
+					username: user.displayName,
 				});
 			} else {
 				res.sendStatus(403);
