@@ -21,7 +21,7 @@
 		"@types/passport": "^1.0.16",
 		"@types/passport-steam": "^1.0.4",
 		"@types/pg": "^8.10.9",
-		"@typescript-eslint/eslint-plugin": "^6.13.2",
+		"@typescript-eslint/eslint-plugin": "^6.15.0",
 		"@typescript-eslint/parser": "^6.13.2",
 		"@vitest/coverage-v8": "^1.0.2",
 		"eslint": "^8.55.0",
