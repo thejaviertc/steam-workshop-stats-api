@@ -2,7 +2,7 @@
 	"name": "steam-workshop-stats-api",
 	"type": "module",
 	"author": "javiertc",
-	"version": "1.2.2",
+	"version": "1.2.3",
 	"dependencies": {
 		"axios": "^1.6.2",
 		"cors": "^2.8.5",
